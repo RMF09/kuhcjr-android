@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailPeminjamanMobil">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/background"
+            android:scaleType="centerCrop"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="120dp">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="4dp"
+                card_view:cardCornerRadius="2dp"
+                android:layout_marginLeft="26dp"
+                android:layout_marginRight="26dp"
+                card_view:contentPadding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TableRow>
+                            <TextView
+                                android:text="Tahun Penilaian"/>
+                            <TextView
+                                android:text=" : "/>
+                            <TextView
+                                android:id="@+id/tahun_penilaian"
+                                android:text="2020"
+                                android:layout_weight="1"/>
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:text="Perubahan Terakhir"/>
+                            <TextView
+                                android:text=" : "/>
+                            <TextView
+                                android:id="@+id/perubahan_terakhir"
+                                android:text="Senin, 21 Mar 2020 WAS"
+                                android:layout_weight="1"/>
+                        </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:text="Status"/>
+                            <TextView
+                                android:text=" : "/>
+                            <TextView
+                                android:id="@+id/status"
+                                android:layout_weight="1"
+                                android:text="Selesai"
+                                android:textColor="@color/colorGreen"
+                                android:textStyle="bold|italic" />
+                        </TableRow>
+                    </TableLayout>
+                    <LinearLayout
+                        android:id="@+id/linear_db_operasi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="right">
+                        <ImageView
+                            android:id="@+id/isi_skp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            card_view:srcCompat="@drawable/ic_edit_black_24dp"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"/>
+
+                        <ImageView
+                            android:id="@+id/hasil_penilaian"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginLeft="10dp"
+                            card_view:srcCompat="@drawable/ic_assignment_turned_in_black_24dp"
+                            android:tint="@color/colorPrimary"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"/>
+
+                        <ImageView
+                            android:id="@+id/print_skp"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginLeft="10dp"
+                            card_view:srcCompat="@drawable/ic_print_black_24dp"
+                            android:tint="@color/colorPrint"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"/>
+
+                    </LinearLayout>
+                    <WebView
+                        android:id="@+id/webview"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        tools:ignore="WebViewLayout"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+
+    </FrameLayout>
+    <TextView
+        android:id="@+id/text_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Detail Pengisian SKP"
+        android:textSize="@dimen/textHeaderSize"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="40dp"/>
+</RelativeLayout>

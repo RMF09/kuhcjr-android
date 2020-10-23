@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditProfile"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_lembur"
+            android:scaleType="centerCrop"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="120dp"
+            android:animateLayoutChanges="true"
+            android:animationCache="true"
+
+            >
+            <ScrollView
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="565dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/paddingLinear"
+                    android:animateLayoutChanges="true"
+                    android:animationCache="true">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:id="@+id/image_profile"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/kain"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/btn_ubah_foto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:contentDescription="Edit Ubah Foto Profile"
+                            android:tint="@color/colorWhiteText"
+                            app:fabCustomSize="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.612"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:maxImageSize="22dp"
+                            app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kantor Kerja"
+                        android:gravity="center"
+                        android:layout_marginTop="40dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorText"
+                        android:text="Instansi"
+                        android:textStyle="bold"/>
+                    <EditText
+                        android:id="@+id/edit_instansi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Satuan Kerja"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_satuan_kerja"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Unit Kerja"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_unit_kerja"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sub Unit Kerja"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_sub_unit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Identitas"
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_nama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NIK"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_nik"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jabatan"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_jabatan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nomor Identitas"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_no_identitas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nomor Passport"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_no_passport"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nomor Telepon"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_no_telepon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Alamat"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_alamat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pendidikan Terakhir"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_pendidikan_t"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Profil Atasan"
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama Atasan Kerja"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_nama_atasan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/satuan"
+
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NIK Atasan"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_nik_atasan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:enabled="false"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jabatan Atasan"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorText"
+                        android:layout_marginTop="14dp"/>
+
+                    <EditText
+                        android:id="@+id/edit_jabatan_atasan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:enabled="false"/>
+
+
+                </LinearLayout>
+            </ScrollView>
+
+        </android.support.v7.widget.CardView>
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/colorDark"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="8dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:srcCompat="@drawable/ic_chevron_left_black_24dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tambah Data Pengajuan Lembur"
+            android:textSize="@dimen/textHeaderSize"
+            android:gravity="left"
+            android:textColor="@color/colorWhiteText"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Edit Profil"
+        android:textSize="@dimen/textHeaderSize"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="40dp"/>
+
+
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_simpan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:contentDescription="Edit Profile"
+        app:layout_anchor="@id/cardview"
+        app:layout_anchorGravity="right|bottom|end"
+        android:layout_marginRight="26dp"
+        android:tint="@color/colorWhiteText"
+        app:srcCompat="@drawable/ic_edit_black_24dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

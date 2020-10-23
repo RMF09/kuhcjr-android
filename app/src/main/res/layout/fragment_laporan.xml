@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="26dp"
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="18dp"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="4dp"
+        card_view:contentPadding="12dp"
+        android:layout_marginTop="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dari Tanggal"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/cetak_dari_tanggal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hari/bulan/tahun"
+                android:focusable="false"
+                android:inputType="none" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sampai Tanggal"
+                android:textColor="@color/colorText"
+                android:textStyle="bold"
+                android:layout_marginTop="14dp"/>
+            <EditText
+                android:id="@+id/cetak_sampai_tanggal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hari/bulan/tahun"
+                android:focusable="false"
+                android:inputType="none" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_cetak_laporan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        card_view:srcCompat="@drawable/ic_print_black_24dp"
+        card_view:layout_anchor="@id/cardview"
+        card_view:layout_anchorGravity="bottom|right|end"
+        android:layout_marginRight="14dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

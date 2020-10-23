@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:animateLayoutChanges="true"
+    android:animationCache="true">
+
+    <TextView
+        android:id="@+id/text_header_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mengunduh file, harap menunggu..."
+        android:textColor="@color/colorBlackText"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:progress="0"/>
+        <TextView
+            android:id="@+id/text_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:text="0%"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/text_keterangan_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="File unduhan disimpan di folder Download pada Penyimpanan Internal."/>
+
+        <TextView
+            android:id="@+id/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:padding="14dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:layout_gravity="right"
+            android:clickable="true"
+            android:visibility="gone"
+            android:foreground="?android:attr/selectableItemBackground"
+            />
+
+
+</LinearLayout>

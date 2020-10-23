@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/layout_masalah_jaringan"
+    android:padding="20dp"
+    android:visibility="gone">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@drawable/ic_cloud_off_black_24dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Ups... Sepertinya terjadi masalah"/>
+    <TextView
+        android:id="@+id/text_error_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ERR : Failed to connect 192.168.1.28"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/text_muat_ulang_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Muat ulang"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:padding="20dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+</LinearLayout>

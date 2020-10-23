@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailKegiatan">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="120dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"
+                android:animationCache="true">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="26dp"
+                    android:layout_marginBottom="18dp"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="4dp"
+                    card_view:contentPadding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TableLayout
+                            android:id="@+id/table"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TableRow>
+
+                                <TextView android:text="Tanggal" />
+
+                                <TextView android:text=" : " />
+
+                                <TextView
+                                    android:id="@+id/tgl"
+                                    android:layout_weight="1"
+                                    android:text="Sabtu,12 Januari 2020" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView android:text="Kegiatan" />
+
+                                <TextView android:text=" : " />
+
+                                <TextView
+                                    android:id="@+id/kegiatan"
+                                    android:layout_weight="1"
+                                    android:text="A" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView android:text="Hasil" />
+
+                                <TextView android:text=" : " />
+
+                                <TextView
+                                    android:id="@+id/hasil"
+                                    android:layout_weight="1"
+                                    android:text="SD" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView android:text="Jumlah" />
+
+                                <TextView android:text=" : " />
+
+                                <TextView
+                                    android:id="@+id/jumlah"
+                                    android:layout_weight="1"
+                                    android:text="2" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView android:text="Satuan" />
+
+                                <TextView android:text=" : " />
+
+                                <TextView
+                                    android:id="@+id/satuan"
+                                    android:layout_weight="1"
+                                    android:text="Berkas" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView android:text="Keterangan" />
+
+                                <TextView android:text=" : " />
+
+                                <TextView
+                                    android:id="@+id/keterangan"
+                                    android:layout_weight="1"
+                                    android:text="Disetujui sadaskdioasjdio oiasjdioasjdoiasjdisao doijasod" />
+                            </TableRow>
+
+                        </TableLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="end"
+                            android:orientation="horizontal"
+                            >
+
+                            <ImageView
+                                android:id="@+id/file_upload"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                card_view:srcCompat="@drawable/ic_file_upload_black_24dp"
+                                android:clickable="true"
+                                android:foreground="?android:attr/selectableItemBackground"/>
+
+
+                            <ImageView
+                                android:id="@+id/edit"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                card_view:srcCompat="@drawable/ic_edit_black_24dp"
+                                android:clickable="true"
+                                android:foreground="?android:attr/selectableItemBackground"/>
+
+                            <ImageView
+                                android:id="@+id/delete"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:layout_marginLeft="10dp"
+                                card_view:srcCompat="@drawable/ic_delete_black_24dp"
+                                android:clickable="true"
+                                android:foreground="?android:attr/selectableItemBackground"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_file_kegiatan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    card_view:cardCornerRadius="2dp"
+                    card_view:cardElevation="4dp"
+                    card_view:contentPadding="12dp"
+
+                    android:layout_marginLeft="26dp"
+                    android:layout_marginRight="26dp"
+                    android:layout_marginBottom="18dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="File Kegiatan"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorBlackText"
+                            android:layout_marginBottom="10dp"/>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
+
+
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Detail Kegiatan"
+        android:textSize="@dimen/textHeaderSize"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="40dp"/>
+
+</RelativeLayout>

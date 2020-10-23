@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditKegiatan"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_lembur"
+            android:scaleType="centerCrop"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="120dp"
+            android:animateLayoutChanges="true"
+            android:animationCache="true"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/paddingLinear">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tanggal"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tgl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="hari/bulan/tahun"
+                    android:inputType="none"
+                    android:focusable="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kegiatan"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorText"
+                    android:layout_marginTop="14dp"/>
+
+                <EditText
+                    android:id="@+id/kegiatan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hasil"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorText"
+                    android:layout_marginTop="14dp"/>
+
+                <EditText
+                    android:id="@+id/hasil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="14dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorText"
+                            android:text="Jumlah"
+                            android:textStyle="bold"/>
+
+                        <EditText
+                            android:id="@+id/jumlah"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint=""
+                            android:inputType="number"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Satuan"
+                            android:textColor="@color/colorText"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinner_satuan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:entries="@array/satuan" />
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Keterangan"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorText"
+                    android:layout_marginTop="14dp"/>
+
+                <EditText
+                    android:id="@+id/keterangan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"/>
+
+
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/colorDark"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:paddingLeft="8dp"
+        android:visibility="invisible"
+        >
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:srcCompat="@drawable/ic_chevron_left_black_24dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tambah Data Kegiatan"
+            android:textSize="@dimen/textHeaderSize"
+            android:gravity="left"
+            android:textColor="@color/colorWhiteText"
+            />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_marginTop="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ScrollView>
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_simpan"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="center"-->
+    <!--        android:text="Simpan"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        android:background="@color/colorPrimary"-->
+    <!--        android:textColor="@color/colorWhiteText"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:clickable="true"-->
+    <!--        android:foreground="?android:attr/selectableItemBackground"-->
+    <!--        android:visibility="gone"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Edit Data Kegiatan"
+        android:textSize="@dimen/textHeaderSize"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="40dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_simpan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:contentDescription="Tambah Pengajuan"
+        app:layout_anchor="@id/cardview"
+        app:layout_anchorGravity="right|bottom|end"
+        android:layout_marginRight="26dp"
+        android:tint="@color/colorWhiteText"
+        app:srcCompat="@drawable/ic_edit_black_24dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

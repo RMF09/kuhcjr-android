@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="Pengajuan">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_p_lembur"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="@string/menu_p_lembur" />
+                <item
+                    android:id="@+id/nav_p_dinas"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/menu_p_dinas" />
+                <item
+                    android:id="@+id/nav_p_cuti"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_p_cuti" />
+
+
+            </group>
+        </menu>
+
+    </item>
+    <item android:title="Mobil">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_peminjaman_mobil"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="@string/menu_peminjaman_mobil" />
+
+                <item
+                    android:id="@+id/nav_pengembalian_mobil"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_pengembalian_mobil" />
+
+
+            </group>
+        </menu>
+    </item>
+    <item android:title="Kinerja">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_absen_pegawai"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="@string/menu_absensi" />
+
+                <item
+                    android:id="@+id/nav_laporan"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_laporan" />
+
+
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/menu">
+        <menu>
+            <item
+                android:id="@+id/nav_beranda"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_beranda" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/logout" />
+        </menu>
+    </item>
+
+
+
+</menu>

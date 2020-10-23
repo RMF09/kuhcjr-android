@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TambahDataPengajuan.TambahDataPengajuanLembur"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_lembur"
+            android:scaleType="centerCrop"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="120dp"
+            android:animateLayoutChanges="true"
+            android:animationCache="true"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/paddingLinear"
+                android:animateLayoutChanges="true"
+                android:animationCache="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tanggal Pengajuan"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/tgl_lembur"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="hari/bulan/tahun"
+                    android:inputType="none"
+                    android:focusable="false"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="14dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tanggal Mulai Lembur"
+                            android:textColor="@color/colorText"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/jam_mulai"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="--:--"
+                            android:inputType="none"
+                            android:focusable="false"/>
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:text="Format waktu 01:59 AM"/>-->
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tanggal Selesai Lembur"
+                            android:textColor="@color/colorText"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/jam_selesai"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="--:--"
+                            android:inputType="none"
+                            android:focusable="false"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Uraian"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorText"
+                    android:layout_marginTop="14dp"/>
+
+                <EditText
+                    android:id="@+id/uraian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp">
+                    <EditText
+                        android:id="@+id/file_formulir"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:hint="File formulir"
+                        android:ellipsize="end"
+                        android:layout_weight="1"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:scrollHorizontally="true"/>
+                    <Button
+                        android:id="@+id/btn_cari"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cari"
+                        android:layout_weight="0"
+                        android:textAllCaps="false"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/colorDark"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                app:srcCompat="@drawable/ic_chevron_left_black_24dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tambah Data Pengajuan Lembur"
+                android:textSize="@dimen/textHeaderSize"
+                android:gravity="left"
+                android:textColor="@color/colorWhiteText"
+                />
+        </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhiteText"
+        android:text="Tambah Data Pengajuan Lembur"
+        android:textSize="@dimen/textHeaderSize"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="40dp"/>
+
+
+
+
+    <!--    <ScrollView-->
+<!--        android:layout_marginTop="70dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+<!--        -->
+<!--    </ScrollView>-->
+<!--    <Button-->
+<!--        android:id="@+id/btn_simpan"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="Simpan"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        android:textColor="@color/colorWhiteText"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:clickable="true"-->
+<!--        android:foreground="?android:attr/selectableItemBackground"-->
+<!--        android:visibility="gone"/>-->
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_simpan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:contentDescription="Tambah Pengajuan"
+        app:layout_anchor="@id/cardview"
+        app:layout_anchorGravity="right|bottom|end"
+        android:layout_marginRight="26dp"
+        android:tint="@color/colorWhiteText"
+        app:srcCompat="@drawable/ic_menu_send"/>
+</android.support.design.widget.CoordinatorLayout>

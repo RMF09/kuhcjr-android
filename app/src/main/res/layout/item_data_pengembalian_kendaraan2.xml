@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+
+        android:clickable="true"
+        card_view:cardElevation="3dp"
+        card_view:cardCornerRadius="8dp"
+        android:foreground="?android:attr/selectableItemBackground">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:src="@drawable/mobil3"
+                android:scaleType="centerCrop"
+                android:id="@+id/image_mobil"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/merk"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ford Ranger"
+                            android:textSize="16sp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorWhiteText"
+                            android:textStyle="bold"
+                            android:shadowColor="@color/colorBlackText"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="2"/>
+                        <TextView
+                            android:id="@+id/kode_kendaraan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="X 456"
+                            android:maxLines="1"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorGreyLight"
+                            android:shadowColor="@color/colorBlackText"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="2"/>
+                        <ImageView
+
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:src="@drawable/mobil"
+                            android:scaleType="centerCrop"
+                            android:visibility="invisible"
+                            />
+
+                    </LinearLayout>
+                    <!--                end of verticale-->
+                </LinearLayout>
+                <!---->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="right"
+                    android:layout_marginTop="4dp">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="19/01/2019"
+                        android:textSize="12sp"
+                        android:id="@+id/tgl_pengembalian"
+                        android:layout_gravity="center_vertical"/>
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginBottom="2dp"
+                        card_view:srcCompat="@drawable/ic_date_range_black_24dp" />
+
+
+                    <TextView
+                        android:id="@+id/waktu_pengembalian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="20dp"
+                        android:text="25/01/2019"
+                        android:textSize="12sp" />
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_gravity="center_vertical"
+
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginBottom="2dp"
+                        card_view:srcCompat="@drawable/ic_start_time" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+
+
+
+</LinearLayout>

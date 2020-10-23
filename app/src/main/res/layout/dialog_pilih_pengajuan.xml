@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pilih Pengajuan"
+        android:textColor="@color/colorText"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/rg_pengajuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/rb_pengajuan_lembur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lembur"/>
+        <RadioButton
+            android:id="@+id/rb_pengajuan_perjalanan_dinas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Perjalanan Dinas"/>
+        <RadioButton
+            android:id="@+id/rb_pengajuan_cuti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuti"/>
+    </RadioGroup>
+    <TextView
+        android:id="@+id/textBerikutnya"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Berikutnya"
+        android:padding="12dp"
+        android:textColor="@color/colorPrimary"
+        android:textAllCaps="false"
+        android:layout_gravity="right"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"/>
+
+</LinearLayout>

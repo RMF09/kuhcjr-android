@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/text_header_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload file kegiatan"
+        android:textColor="@color/colorBlackText"
+        android:textSize="16sp"
+        android:layout_marginBottom="20dp"/>
+
+    <LinearLayout
+        android:id="@+id/linear_cari_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/image_peringatan"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="16dp"
+            app:srcCompat="@drawable/ic_file_upload_black_24dp"/>
+
+        <EditText
+            android:id="@+id/edit_nama_file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cari File"
+            android:focusable="false"
+            android:inputType="none"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_upload_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/image_status_upload"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:srcCompat="@drawable/ic_check_black_24dp"
+            android:visibility="gone"/>
+        <ProgressBar
+            android:id="@+id/progress_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"/>
+        <TextView
+            android:id="@+id/text_status_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sedang mengupload, harap tunggu..."
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_btn_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+        <TextView
+            android:id="@+id/batal_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BATAL"
+            android:padding="14dp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:layout_gravity="right"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
+        <TextView
+            android:id="@+id/upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UPLOAD"
+            android:padding="14dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:layout_gravity="right"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"/>
+    </LinearLayout>
+
+</LinearLayout>
