@@ -1,16 +1,13 @@
 package com.rmf.kuhcjr.Api;
 
+import com.rmf.kuhcjr.Data.SisaCuti;
 import com.rmf.kuhcjr.Data.GetAbsensiPegawai;
 import com.rmf.kuhcjr.Data.GetCetak;
-import com.rmf.kuhcjr.Data.GetCuti;
 import com.rmf.kuhcjr.Data.GetHasilPenilaian;
 import com.rmf.kuhcjr.Data.GetKantor;
 import com.rmf.kuhcjr.Data.GetKegiatan;
 import com.rmf.kuhcjr.Data.GetKontak;
-import com.rmf.kuhcjr.Data.GetLembur;
-import com.rmf.kuhcjr.Data.GetPeminjamanKendaraan;
 import com.rmf.kuhcjr.Data.GetPengumuman;
-import com.rmf.kuhcjr.Data.GetPerjalananDinas;
 import com.rmf.kuhcjr.Data.GetPimpinan;
 import com.rmf.kuhcjr.Data.GetPostPutFileKegiatan;
 import com.rmf.kuhcjr.Data.GetSKP;
@@ -83,6 +80,10 @@ public interface ApiInterface {
 
 
     //    C U T I
+    @FormUrlEncoded
+    @POST("Cuti")
+    Call<SisaCuti> getSisaCuti(@Field("username") String username, @Field("metode") String metode);
+
     @FormUrlEncoded
     @POST("Cuti")
     Call<PostPutCuti> getCuti(@Field("username") String username,@Field("metode") String metode);

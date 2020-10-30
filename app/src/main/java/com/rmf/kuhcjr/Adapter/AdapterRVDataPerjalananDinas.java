@@ -10,15 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rmf.kuhcjr.Data.DataLembur;
 import com.rmf.kuhcjr.Data.DataPerjalananDinas;
+import com.rmf.kuhcjr.Utils.DateUtils;
 import com.rmf.kuhcjr.Pengajuan.DetailPengajuan;
 import com.rmf.kuhcjr.Pengajuan.PengajuanDinas;
 import com.rmf.kuhcjr.R;
+import com.rmf.kuhcjr.Utils.StatusUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class AdapterRVDataPerjalananDinas extends RecyclerView.Adapter<AdapterRVDataPerjalananDinas.Dinas> {
@@ -32,7 +30,7 @@ public class AdapterRVDataPerjalananDinas extends RecyclerView.Adapter<AdapterRV
     @NonNull
     @Override
     public Dinas onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_data_pengajuan_perjalanan_dinas_2, viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_data_pengajuan_perjalanan_dinas, viewGroup,false);
 
         return new Dinas(view);
     }
@@ -41,11 +39,11 @@ public class AdapterRVDataPerjalananDinas extends RecyclerView.Adapter<AdapterRV
     public void onBindViewHolder(@NonNull Dinas dinas, int i) {
         final int nomor = i+1;
         final int id = list.get(i).getId();
-        final String tanggal =  getDayName(list.get(i).getTanggal());
+        final String tanggal =  DateUtils.getDayName(list.get(i).getTanggal());
         final int status = list.get(i).getStatus();
         final String tujuan = list.get(i).getTujuan();
-        final String mulai = getTime(list.get(i).getMulai());
-        final String selesai = getTime(list.get(i).getSelesai());
+        final String mulai = DateUtils.getTime(list.get(i).getMulai());
+        final String selesai = DateUtils.getTime(list.get(i).getSelesai());
         final String uraian = list.get(i).getUraian();
         final String alasan = list.get(i).getKeterangan();
         final String namafile = list.get(i).getFile_pengajuan();
@@ -56,12 +54,12 @@ public class AdapterRVDataPerjalananDinas extends RecyclerView.Adapter<AdapterRV
         dinas.tgl.setText( tanggal);
         dinas.uraian.setText(uraian);
         dinas.tujuan.setText(tujuan);
-        dinas.status.setText(checkStatus(status));
+        dinas.status.setText(StatusUtils.checkStatus(status));
         dinas.waktuMulai.setText(mulai);
         dinas.waktuSelesai.setText(selesai);
 
-        dinas.status.setTextColor(Color.parseColor(checkWarnaFont(status)));
-        dinas.status.setBackgroundColor(Color.parseColor(checkStatusWarna(status)));
+        dinas.status.setTextColor(Color.parseColor(StatusUtils.checkWarnaFont(status)));
+        dinas.status.setBackgroundColor(Color.parseColor(StatusUtils.checkStatusWarna(status)));
 
         dinas.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +68,7 @@ public class AdapterRVDataPerjalananDinas extends RecyclerView.Adapter<AdapterRV
                 Intent intent = new Intent(v.getContext(),DetailPengajuan.class);
                 intent.putExtra("kategori","dinas");
                 intent.putExtra("tanggal",tanggal);
-                intent.putExtra("status",checkStatus(status));
+                intent.putExtra("status", StatusUtils.checkStatus(status));
                 intent.putExtra("mulai",mulai);
                 intent.putExtra("selesai",selesai);
                 intent.putExtra("uraian",uraian);
@@ -108,74 +106,5 @@ public class AdapterRVDataPerjalananDinas extends RecyclerView.Adapter<AdapterRV
             cardView = (CardView) itemView.findViewById(R.id.cardview);
         }
     }
-    private String checkStatus(int status){
-        String hasil="";
 
-        switch (status){
-
-            case 1: hasil = "Diproses";
-                break;
-            case 2: hasil = "Disetujui";
-                break;
-            case 3: hasil = "Ditolak";
-                break;
-            default: hasil = "Pending";
-                break;
-        }
-        return hasil;
-    }
-    private String checkWarnaFont(int status){
-        String hasil="#383838";
-
-        switch (status){
-            case 0: hasil = "#383838";
-                break;
-            default: hasil ="#FFFFFF";
-                break;
-        }
-        return hasil;
-    }
-    private String checkStatusWarna(int status){
-        String hasil="#ffc107";
-
-        switch (status){
-            case 1: hasil = "#17a2b8";
-                break;
-            case 2: hasil = "#28a745";
-                break;
-            case 3: hasil = "#dc3545";
-                break;
-            default: hasil ="#ffc107";
-                break;
-        }
-        return hasil;
-    }
-    private String getDayName(String tgl){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date =null;
-        try {
-            date = simpleDateFormat.parse(tgl);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat output = new SimpleDateFormat("EEEE, dd MMMM yyyy");
-        String akhir = output.format(date);
-
-        return akhir;
-
-    }
-    private String getTime(String time){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        Date date =null;
-        try {
-            date = simpleDateFormat.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat output = new SimpleDateFormat("HH:mm");
-        String akhir = output.format(date);
-
-        return akhir;
-
-    }
 }

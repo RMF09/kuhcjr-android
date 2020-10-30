@@ -46,6 +46,7 @@ import com.rmf.kuhcjr.Data.DataCuti;
 import com.rmf.kuhcjr.Data.GetCuti;
 import com.rmf.kuhcjr.Data.PostPutCuti;
 import com.rmf.kuhcjr.Data.PostPutLembur;
+import com.rmf.kuhcjr.Data.SisaCuti;
 import com.rmf.kuhcjr.FileUtils;
 import com.rmf.kuhcjr.Pengajuan.PengajuanCuti;
 import com.rmf.kuhcjr.R;
@@ -76,8 +77,11 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
     private Button btnCari;
     private FloatingActionButton btnSimpan;
     private String username;
-
+    private int sisaCuti=0;
+    private TextView textSisaCuti;
     private ApiInterface apiInterface;
+    private boolean sisaCutiHabis;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +101,7 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
         }
         username = SharedPrefs.getInstance(this).LoggedInUser();
         initialUI();
+        getSisaCuti();
     }
 
     private void initialUI(){
@@ -109,6 +114,8 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
 
         btnCari = (Button) findViewById(R.id.btn_cari);
         btnSimpan= (FloatingActionButton) findViewById(R.id.btn_simpan);
+
+        textSisaCuti = (TextView) findViewById(R.id.sisa_cuti);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         initialDialogPengajuan();
@@ -165,9 +172,13 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if(checkInput(v)){
-                    show("Mengajukan data cuti...");
-                    insertData(fileUri,ubahFormatTanggalKeSQL(editMulaiCuti.getText().toString()),ubahFormatTanggalKeSQL(editSelesaiCuti.getText().toString()),editUraian.getText().toString());
+                if (!sisaCutiHabis){
+                    if(checkInput(v)){
+                        show("Mengajukan data cuti...");
+                        insertData(fileUri,ubahFormatTanggalKeSQL(editMulaiCuti.getText().toString()),ubahFormatTanggalKeSQL(editSelesaiCuti.getText().toString()),editUraian.getText().toString());
+                    }
+                }else{
+                    Snackbar.make(v,"Tidak dapat mengajukan cuti, sisa cuti Anda habis",Snackbar.LENGTH_LONG);
                 }
             }
         });
@@ -254,8 +265,27 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
         }
         return cek;
     }
+    private void getSisaCuti(){
+        Call<SisaCuti> sisaCutiCall = apiInterface.getSisaCuti(username,"sisa_cuti");
+        sisaCutiCall.enqueue(new Callback<SisaCuti>() {
+            @Override
+            public void onResponse(Call<SisaCuti> call, Response<SisaCuti> response) {
+                if (response.isSuccessful()){
+                    if(response.body().getStatus().equals("berhasil")){
+                        sisaCuti =response.body().getSisa_cuti();
+                        textSisaCuti.setTextColor(Color.parseColor(checkSisaCuti()));
+                    }
+                    else{ failure("gagal"); }
+                }
+                else{ failure("Terjadi masalah pada Server"); }
+            }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onFailure(Call<SisaCuti> call, Throwable t) {
+                failure(t.getMessage());
+            }
+        });
+    }
     private void insertData(Uri fileUri, String tanggalMulai, String tanggalSelesai, String uraian){
 
         try {
@@ -315,98 +345,7 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
         cursor.close();
         return result;
     }
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getPathFromURI(final Context context, final Uri uri) {
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
-                }
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
-            }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    }
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
     private String ubahFormatTanggalKeSQL(String tgl){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date =null;
@@ -481,6 +420,23 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
             winParams.flags &= ~bits;
         }
         win.setAttributes(winParams);
+    }
+
+    private String checkSisaCuti(){
+        sisaCutiHabis=false;
+        textSisaCuti.setText(String.valueOf(sisaCuti));
+
+        if(sisaCuti>6){
+            return "#28a745";
+        }
+        else if(sisaCuti<=6 && sisaCuti>0){
+            return "#ffc107";
+        }
+        else{
+            sisaCutiHabis=true;
+            return "#dc3545";
+        }
+
     }
 
 }

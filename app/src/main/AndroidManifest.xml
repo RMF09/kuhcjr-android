@@ -99,7 +99,7 @@
         </receiver>
 
         <!-- Will not be called unless the application explicitly enables it -->
-        <receiver android:name=".DeviceRebootReceiver"
+        <receiver android:name=".Services.DeviceRebootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

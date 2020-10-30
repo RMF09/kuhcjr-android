@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorText"
-                    android:text="Tanggal Lembur"
+                    android:text="Tanggal Pengajuan"
                     android:textStyle="bold"/>
                 <EditText
                     android:id="@+id/tgl_lembur"
@@ -50,59 +50,39 @@
                     android:hint="hari/bulan/tahun"
                     android:inputType="none"
                     android:focusable="false"/>
-                <LinearLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="Tanggal Mulai Lembur"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/tanggal_mulai"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="14dp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorText"
-                            android:text="Mulai"
-                            android:textStyle="bold"/>
+                    android:focusable="false"
+                    android:hint="hari/bulan/tahun"
+                    android:inputType="none" />
 
-                        <EditText
-                            android:id="@+id/jam_mulai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="--:--"
-                            android:inputType="none"
-                            android:focusable="false"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Format waktu 01:59 AM"/>
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="Tanggal Selesai Lembur"
+                    android:textColor="@color/colorText"
+                    android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Selesai"
-                            android:textColor="@color/colorText"
-                            android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/tanggal_selesai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="hari/bulan/tahun"
+                    android:inputType="none" />
 
-                        <EditText
-                            android:id="@+id/jam_selesai"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="--:--"
-                            android:inputType="none"
-                            android:focusable="false"/>
-                    </LinearLayout>
-                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

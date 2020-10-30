@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.rmf.kuhcjr.Data.DataPeminjamanKendaraan;
 import com.rmf.kuhcjr.DetailPeminjamanMobil;
 import com.rmf.kuhcjr.R;
@@ -30,7 +29,7 @@ public class AdapterRVPengembalianKendaraan extends RecyclerView.Adapter<Adapter
 
     @Override
     public MyViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
-        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_data_pengembalian_kendaraan2, parent, false);
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_data_pengembalian_kendaraan, parent, false);
         MyViewHolder mViewHolder = new MyViewHolder(mView);
         return mViewHolder;
     }

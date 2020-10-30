@@ -211,7 +211,6 @@ public class EditProfile extends AppCompatActivity {
 
                     nipAtasan = listDataProfile.get(0).getNip_atasan();
                     kegiatan_identitas_diisi=true;
-
                 }
                 loadDataPimpinan();
             }
@@ -318,6 +317,10 @@ public class EditProfile extends AppCompatActivity {
                 RequestBody namaAtasan = RequestBody.create(MediaType.parse("text/plain"), listPimpinan.get(indexAtasan).getNama());
                 RequestBody nipAtasan = RequestBody.create(MediaType.parse("text/plain"), editNIKAtasan.getText().toString());
                 RequestBody jabatanAtasan = RequestBody.create(MediaType.parse("text/plain"), editJabatanAtasan.getText().toString());
+
+                if(fileBefore==null){
+                    fileBefore="";
+                }
                 RequestBody fileB = RequestBody.create(MediaType.parse("text/plain"), fileBefore);
 
 
@@ -352,12 +355,15 @@ public class EditProfile extends AppCompatActivity {
                 });
             }catch (NullPointerException e){
                 filePath ="";
-//                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 String uname = SharedPrefs.getInstance(this).LoggedInUser();
+                String metodeSimpan ="editProfil";
+                if(kegiatan_identitas_diisi==false){
+                    metodeSimpan = "simpanProfil";
+                }
                 //RequestBody
                 RequestBody requestFile = RequestBody.create(MediaType.parse(""),"");
                 MultipartBody.Part fileBody = MultipartBody.Part.createFormData("file","",requestFile);
-                RequestBody metode = RequestBody.create(MediaType.parse("text/plain"), "editProfil");
+                RequestBody metode = RequestBody.create(MediaType.parse("text/plain"), metodeSimpan);
                 RequestBody username = RequestBody.create(MediaType.parse("text/plain"), uname);
                 RequestBody instansi = RequestBody.create(MediaType.parse("text/plain"), editInstansi.getText().toString());
                 RequestBody satuanKerja = RequestBody.create(MediaType.parse("text/plain"), editSatuanKerja.getText().toString());
@@ -374,6 +380,11 @@ public class EditProfile extends AppCompatActivity {
                 RequestBody namaAtasan = RequestBody.create(MediaType.parse("text/plain"), listPimpinan.get(indexAtasan).getNama());
                 RequestBody nipAtasan = RequestBody.create(MediaType.parse("text/plain"), editNIKAtasan.getText().toString());
                 RequestBody jabatanAtasan = RequestBody.create(MediaType.parse("text/plain"), editJabatanAtasan.getText().toString());
+
+                if(fileBefore==null){
+                    fileBefore="";
+                    Log.e("TAG", "simpanPerubahan: kaide");
+                }
                 RequestBody fileB = RequestBody.create(MediaType.parse("text/plain"), fileBefore);
 
 
