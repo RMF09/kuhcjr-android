@@ -1,7 +1,6 @@
 package com.rmf.kuhcjr.Adapter;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,15 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rmf.kuhcjr.Data.DataCuti;
 import com.rmf.kuhcjr.Data.DataKegiatan;
+import com.rmf.kuhcjr.Utils.DateUtils;
 import com.rmf.kuhcjr.DetailKegiatan;
-import com.rmf.kuhcjr.Pengajuan.DetailPengajuan;
 import com.rmf.kuhcjr.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class AdapterRVDataKegiatan extends RecyclerView.Adapter<AdapterRVDataKegiatan.Kegiatan> {
@@ -31,7 +26,7 @@ public class AdapterRVDataKegiatan extends RecyclerView.Adapter<AdapterRVDataKeg
     @NonNull
     @Override
     public Kegiatan onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_data_kegiatan2, viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_data_kegiatan, viewGroup,false);
 
         return new Kegiatan(view);
     }
@@ -39,7 +34,7 @@ public class AdapterRVDataKegiatan extends RecyclerView.Adapter<AdapterRVDataKeg
     @Override
     public void onBindViewHolder(@NonNull final Kegiatan kegiatans, int i) {
         final int id = list.get(i).getId();
-        final String tanggal =  getDayName(list.get(i).getTanggal());
+        final String tanggal = DateUtils.getDayName(list.get(i).getTanggal());
         final String kegiatan =  list.get(i).getKegiatan();
         final String hasil =  list.get(i).getHasil();
         final String jumlah = list.get(i).getJumlah();
@@ -92,49 +87,5 @@ public class AdapterRVDataKegiatan extends RecyclerView.Adapter<AdapterRVDataKeg
             cardView = (CardView) itemView.findViewById(R.id.cardview);
         }
     }
-    private String checkStatus(int status){
-        String hasil="";
 
-        switch (status){
-
-            case 1: hasil = "Diproses";
-                break;
-            case 2: hasil = "Disetujui";
-                break;
-            case 3: hasil = "Ditolak";
-                break;
-            default: hasil = "Pending";
-                break;
-        }
-        return hasil;
-    }
-    private String checkStatusWarna(int status){
-        String hasil="#ffc107";
-
-        switch (status){
-            case 1: hasil = "#17a2b8";
-                break;
-            case 2: hasil = "#28a745";
-                break;
-            case 3: hasil = "#dc3545";
-                break;
-            default: hasil ="#ffc107";
-                break;
-        }
-        return hasil;
-    }
-    private String getDayName(String tgl){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date =null;
-        try {
-            date = simpleDateFormat.parse(tgl);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat output = new SimpleDateFormat("EEEE, dd MMMM yyyy");
-        String akhir = output.format(date);
-
-        return akhir;
-
-    }
 }

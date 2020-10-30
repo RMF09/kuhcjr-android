@@ -44,6 +44,8 @@ import com.rmf.kuhcjr.EditDataPengajuan.EditPengajuanDinas;
 import com.rmf.kuhcjr.EditDataPengajuan.EditPengajuanLembur;
 import com.rmf.kuhcjr.R;
 import com.rmf.kuhcjr.TambahDataPengajuan.TambahDataPengajuanLembur;
+import com.rmf.kuhcjr.Utils.DateUtils;
+import com.rmf.kuhcjr.Utils.StatusUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -369,11 +371,11 @@ public class DetailPengajuan extends AppCompatActivity {
 
                         List<DataLembur> dataLembur= response.body().getListLembur();
 
-                        tanggal = getDayName(dataLembur.get(0).getTanggal());
-                        mulai = getTime(dataLembur.get(0).getMulai());
-                        selesai = getTime(dataLembur.get(0).getSelesai());
+                        tanggal = DateUtils.getDayName(dataLembur.get(0).getTanggal());
+                        mulai = DateUtils.getTime(dataLembur.get(0).getMulai());
+                        selesai = DateUtils.getTime(dataLembur.get(0).getSelesai());
                         uraian = dataLembur.get(0).getUraian();
-                        status = checkStatus(dataLembur.get(0).getStatus());
+                        status = StatusUtils.checkStatus(dataLembur.get(0).getStatus());
                         alasan = dataLembur.get(0).getKeterangan();
                         namafile = dataLembur.get(0).getFile_pengajuan();
                         namaSuratTugas = dataLembur.get(0).getFile();
@@ -424,11 +426,11 @@ public class DetailPengajuan extends AppCompatActivity {
 
                         List<DataPerjalananDinas> dataDinas= response.body().getListPerjalananDinas();
 
-                        tanggal = getDayName(dataDinas.get(0).getTanggal());
-                        mulai = getTime(dataDinas.get(0).getMulai());
-                        selesai = getTime(dataDinas.get(0).getSelesai());
+                        tanggal = DateUtils.getDayName(dataDinas.get(0).getTanggal());
+                        mulai = DateUtils.getTime(dataDinas.get(0).getMulai());
+                        selesai = DateUtils.getTime(dataDinas.get(0).getSelesai());
                         uraian = dataDinas.get(0).getUraian();
-                        status = checkStatus(dataDinas.get(0).getStatus());
+                        status = StatusUtils.checkStatus(dataDinas.get(0).getStatus());
                         alasan = dataDinas.get(0).getKeterangan();
                         tujuan = dataDinas.get(0).getTujuan();
                         namafile = dataDinas.get(0).getFile_pengajuan();
@@ -478,10 +480,10 @@ public class DetailPengajuan extends AppCompatActivity {
                         List<DataCuti> dataCuti= response.body().getListCuti();
 
 
-                        mulai = getDayName(dataCuti.get(0).getMulai());
-                        selesai = getDayName(dataCuti.get(0).getSelesai());
+                        mulai = DateUtils.getDayName(dataCuti.get(0).getMulai());
+                        selesai = DateUtils.getDayName(dataCuti.get(0).getSelesai());
                         uraian = dataCuti.get(0).getUraian();
-                        status = checkStatus(dataCuti.get(0).getStatus());
+                        status = StatusUtils.checkStatus(dataCuti.get(0).getStatus());
                         alasan = dataCuti.get(0).getKeterangan();
                         namafile = dataCuti.get(0).getFile_pengajuan();
                         namaSuratTugas = dataCuti.get(0).getFile();
@@ -517,50 +519,7 @@ public class DetailPengajuan extends AppCompatActivity {
         });
     }
 
-    private String getDayName(String tgl){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date =null;
-        try {
-            date = simpleDateFormat.parse(tgl);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat output = new SimpleDateFormat("EEEE, dd MMMM yyyy");
-        String akhir = output.format(date);
-
-        return akhir;
-
-    }
-    private String getTime(String time){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        Date date =null;
-        try {
-            date = simpleDateFormat.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat output = new SimpleDateFormat("HH:mm");
-        String akhir = output.format(date);
-
-        return akhir;
-
-    }
-    private String checkStatus(int status){
-        String hasil="";
-
-        switch (status){
-
-            case 1: hasil = "Diproses";
-                break;
-            case 2: hasil = "Disetujui";
-                break;
-            case 3: hasil = "Ditolak";
-                break;
-            default: hasil = "Pending";
-                break;
-        }
-        return hasil;
-    }
+   
 
     private void initialDialogHapus(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

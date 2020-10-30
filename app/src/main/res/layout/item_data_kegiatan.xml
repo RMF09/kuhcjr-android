@@ -1,72 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingHorizontal="8dp">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:contentPadding="8dp"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="0dp"
-        card_view:cardBackgroundColor="@color/colorTransparent"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+
+        card_view:contentPadding="10dp"
         android:clickable="true"
+        card_view:cardElevation="3dp"
+        card_view:cardCornerRadius="8dp"
         android:foreground="?android:attr/selectableItemBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                >
-
+                android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/tgl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tanggal : Sabtu, 18 Januari 2020"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorText"/>
-                <TextView
-                    android:id="@+id/kegiatan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kegiatan : S "
-                    android:layout_marginTop="2dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"/>
-                <TextView
-                    android:id="@+id/hasil"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hasil : A"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:layout_marginTop="2dp"/>
+                    android:id="@+id/nomor"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:text="1"
+                    android:gravity="center"
+                    android:textSize="26sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tgl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Senin, 13 April 2020"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorBlackText"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/kegiatan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Scan barcode"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="2dp">
 
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            card_view:srcCompat="@drawable/ic_assignment_turned_in_black_24dp"/>
+                        <TextView
+                            android:id="@+id/hasil"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Berhasil"
+                            android:maxLines="1"
+                            android:ellipsize="end"
 
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+<!--                end of verticale-->
             </LinearLayout>
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                card_view:srcCompat="@drawable/ic_chevron_right_black_24dp"
-                android:layout_gravity="center"/>
+<!---->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_marginTop="8dp">
+
+
+                <TextView
+                    android:id="@+id/jumlah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="5"
+                    android:textSize="12sp" />
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center_vertical"
+
+                    android:layout_marginLeft="2dp"
+
+                    card_view:srcCompat="@drawable/ic_archive_black_24dp" />
+
+
+                <TextView
+                    android:id="@+id/satuan"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Kegiatan"
+                    android:textSize="12sp"
+                    android:gravity="right"
+                    android:layout_marginLeft="20dp"
+                    android:layout_gravity="center_vertical"/>
+
+                <ImageView
+                    android:layout_width="9dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    card_view:srcCompat="@drawable/ic_local_offer_black_24dp" />
+            </LinearLayout>
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorGreyLight"/>
+
 
 
 

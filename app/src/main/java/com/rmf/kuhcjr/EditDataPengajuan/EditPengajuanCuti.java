@@ -103,7 +103,6 @@ public class EditPengajuanCuti extends AppCompatActivity {
 
         initialUI();
 
-//        Toast.makeText(this, String.valueOf(id), Toast.LENGTH_SHORT).show();
     }
 
     private void initialUI(){

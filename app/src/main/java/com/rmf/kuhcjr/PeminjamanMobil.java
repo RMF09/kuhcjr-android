@@ -20,39 +20,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.rmf.kuhcjr.Adapter.AdapterRVPeminjamanKendaraan;
-import com.rmf.kuhcjr.Adapter.KontakAdapter;
 import com.rmf.kuhcjr.Api.ApiClient;
 import com.rmf.kuhcjr.Api.ApiInterface;
-import com.rmf.kuhcjr.Data.DataKontak;
 import com.rmf.kuhcjr.Data.DataPeminjamanKendaraan;
-import com.rmf.kuhcjr.Data.GetKontak;
-import com.rmf.kuhcjr.Data.GetPeminjamanKendaraan;
-import com.rmf.kuhcjr.Data.PostPutKontak;
 import com.rmf.kuhcjr.Data.PostPutPeminjamanKendaraan;
-import com.rmf.kuhcjr.Pengajuan.PengajuanLembur;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;

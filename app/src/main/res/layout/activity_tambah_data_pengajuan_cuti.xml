@@ -122,6 +122,25 @@
                         android:visibility="gone"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold|italic"
+                        android:text="Sisa Cuti : " />
+                    <TextView
+                        android:id="@+id/sisa_cuti"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/colorRed"/>
+                </LinearLayout>
+
 
 
             </LinearLayout>

@@ -76,12 +76,10 @@ public class MenuUtama extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
                 fragmentBeranda,tag).commit();
 
-        displayFirebaseRegId();
-
         FirebaseMessaging.getInstance().subscribeToTopic("Berita").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(MenuUtama.this, "Success Berita", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MenuUtama.this, "Success Berita", Toast.LENGTH_SHORT).show();
             }
         });
         RegistBR = new BroadcastReceiver() {
@@ -101,7 +99,7 @@ public class MenuUtama extends AppCompatActivity {
 
                     String message = intent.getStringExtra("message");
 
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
                 }
             }

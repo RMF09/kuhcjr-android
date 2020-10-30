@@ -1,4 +1,4 @@
-package com.rmf.kuhcjr;
+package com.rmf.kuhcjr.Services;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
