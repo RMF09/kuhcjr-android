@@ -287,52 +287,17 @@ public class BerandaFragment extends Fragment {
             return jumlah_pengumuman;
         }
     }
-    private void checkPengumuman(){
-        final Call<GetPengumuman> pengumumanCall = apiInterface.getPengumuman("pengumuman");
-        pengumumanCall.enqueue(new Callback<GetPengumuman>() {
-            @Override
-            public void onResponse(Call<GetPengumuman> call, Response<GetPengumuman> response) {
-                if(response.isSuccessful()){
-                    if(response.body().getStatus().equals("berhasil")){
-                        jumlah_pengumuman = response.body().getListPengumuman().size();
-                        list = response.body().getListPengumuman();
-                        adapterRVDataPengumuman = new AdapterRVDataPengumuman(list,BerandaFragment.this);
-                        rv.setAdapter(adapterRVDataPengumuman);
-                        rv.getAdapter().notifyDataSetChanged();
-                        adaNotif();
-
-                    }
-                    else {
-                        tidakAdaNotif();
-                    }
-                    notifCounter.setText(String.valueOf(jumlahNotif()));
-                }
-                else{
-                    Toast.makeText(getContext(), "Terjadi kesalahan pada server", Toast.LENGTH_SHORT).show();
-                }
-                checkKegiatanIdentitas();
-            }
-
-            @Override
-            public void onFailure(Call<GetPengumuman> call, Throwable t) {
-                Toast.makeText(getContext(),t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private void tidakAdaNotif(){
         notifPengumuman.setVisibility(View.GONE);
         notifCard.setVisibility(View.GONE);
     }
-    private void adaNotif(){
-        notifPengumuman.setVisibility(View.VISIBLE);
-        notifCard.setVisibility(View.VISIBLE);
-    }
+
 
     @Override
     public void onResume() {
         super.onResume();
-        checkPengumuman();
+//        checkPengumuman();
 
     }
     //Download FIle
@@ -477,7 +442,6 @@ public class BerandaFragment extends Fragment {
 
     private void askForPermission(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);

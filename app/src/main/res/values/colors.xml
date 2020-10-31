@@ -5,6 +5,7 @@
     <color name="colorDark">#343a40</color>
     <color name="colorAccent">#17a2b8</color>
     <color name="colorWhite">#EBEBEB</color>
+    <color name="colorPureWhite">#FFFFFF</color>
     <color name="colorWhiteTrans">#D2FFFFFF</color>
     <color name="colorWhiteText">#FFFFFF</color>
     <color name="colorText">#383838</color>

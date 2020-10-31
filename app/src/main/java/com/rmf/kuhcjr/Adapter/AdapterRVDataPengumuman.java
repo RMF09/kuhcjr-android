@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.rmf.kuhcjr.Data.DataPengumuman;
 import com.rmf.kuhcjr.Fragments.BerandaFragment;
+import com.rmf.kuhcjr.Pengumuman;
 import com.rmf.kuhcjr.R;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
 public class AdapterRVDataPengumuman extends RecyclerView.Adapter<AdapterRVDataPengumuman.Pengumuman> {
 
     List<DataPengumuman> list;
-    BerandaFragment berandaFragment;
+    com.rmf.kuhcjr.Pengumuman pengumumanActivity;
 
-    public AdapterRVDataPengumuman(List<DataPengumuman> list, BerandaFragment berandaFragment) {
+    public AdapterRVDataPengumuman(List<DataPengumuman> list, com.rmf.kuhcjr.Pengumuman pengumumanActivity) {
         this.list = list;
-        this.berandaFragment = berandaFragment;
+        this.pengumumanActivity = pengumumanActivity;
     }
 
     @NonNull
@@ -45,8 +46,8 @@ public class AdapterRVDataPengumuman extends RecyclerView.Adapter<AdapterRVDataP
         pengumuman.linearLayoutLampiranFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                berandaFragment.namafile = file;
-                berandaFragment.downloadZipFile(berandaFragment.namafile);
+                pengumumanActivity.setNamafile(file);
+                pengumumanActivity.downloadZipFile(pengumumanActivity.getNamafile());
             }
         });
 
