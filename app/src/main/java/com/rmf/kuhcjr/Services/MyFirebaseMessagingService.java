@@ -64,15 +64,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
     private void handleNotification(String message) {
-        if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-            // app is in foreground, broadcast the push message
-            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", message);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
-        }else{
-            // If the app is in background, firebase itself handles the notification
-        }
+//        if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+//            // app is in foreground, broadcast the push message
+//            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//            pushNotification.putExtra("message", message);
+//            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//
+//        }else{
+//            // If the app is in background, firebase itself handles the notification
+//        }
     }
 
     private void handleDataMessage(JSONObject json) {
@@ -96,20 +96,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "timestamp: " + timestamp);
 
 
-            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-                // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
-            } else {
+//            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+//                // app is in foreground, broadcast the push message
+//                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//                pushNotification.putExtra("message", message);
+//                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//
+//            }
+//            else {
                 // app is in background, show the notification in notification tray
                 Intent resultIntent = new Intent(getApplicationContext(), MenuUtama.class);
                 resultIntent.putExtra("message", message);
 
                 showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
 
-                }
+//                }
             } catch (JSONException e) {
             Log.e(TAG, "Json Exception: " + e.getMessage());
         } catch (Exception e) {

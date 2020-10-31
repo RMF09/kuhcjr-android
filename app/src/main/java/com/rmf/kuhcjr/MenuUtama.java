@@ -204,8 +204,6 @@ public class MenuUtama extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(RegistBR,
                 new IntentFilter(Config.PUSH_NOTIFICATION));
 
-        // clear the notification area when the app is opened
-        NotificationUtils.clearNotifications(getApplicationContext());
     }
 
     @Override

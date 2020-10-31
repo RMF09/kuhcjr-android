@@ -45,6 +45,7 @@ import com.rmf.kuhcjr.Data.GetPengumuman;
 import com.rmf.kuhcjr.Data.GetUserLogin;
 import com.rmf.kuhcjr.DetailKegiatan;
 import com.rmf.kuhcjr.EditProfile;
+import com.rmf.kuhcjr.Pengumuman;
 import com.rmf.kuhcjr.Services.AlarmReceiver;
 import com.rmf.kuhcjr.LaporanKinerja;
 import com.rmf.kuhcjr.PeminjamanMobil;
@@ -88,22 +89,8 @@ public class BerandaFragment extends Fragment {
     private static final int MAX_NOTIF =99;
 
     private ApiInterface apiInterface;
-    //list notif
-    List<DataPengumuman> list= new ArrayList<>();
-    RecyclerView rv;
-    AdapterRVDataPengumuman adapterRVDataPengumuman;
 
-    //Donwload Lampiran
-    DownloadZipFileTask downloadZipFileTask;
-    public String namafile;
-    private  static final String TAG = "BerandaFragment";
 
-    //Dialog Download
-
-    ProgressBar progressBar;
-    TextView textProgress,textHeaderDownload;
-    TextView textOKDownload,textKeteranganDownload;
-    AlertDialog alertDialogDownload;
 
     //Dialog Peringatan
     AlertDialog alertDialogPeringatan;
@@ -133,7 +120,6 @@ public class BerandaFragment extends Fragment {
         pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, 0);
         startAt10();
 
-        askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,101);
 //        checkKegiatanIdentitas();
 
         return view;
@@ -150,8 +136,6 @@ public class BerandaFragment extends Fragment {
         cardSKP = view.findViewById(R.id.card_skp);
 
         initialDialogPengajuan();
-        initialDialogPengumuman();
-        initialDialogDownload();
         initialDialogPeringatan();
         this.actionUI(view);
 
@@ -198,16 +182,7 @@ public class BerandaFragment extends Fragment {
         });
     }
 
-    private void initialDialogPengumuman(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        final View view  = getLayoutInflater().inflate(R.layout.dialog_pengumuman,null);
-        rv = (RecyclerView) view.findViewById(R.id.rv_pengumuman);
-        rv.setLayoutManager(new LinearLayoutManager(this.view.getContext(),LinearLayoutManager.VERTICAL,false));
-        builder.setView(view);
-        builder.setCancelable(true);
-        alertDialogPengumuman = builder.create();
 
-    }
     private void initialDialogPengajuan(){
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         final View view = getLayoutInflater().inflate(R.layout.dialog_pilih_pengajuan,null);
@@ -276,7 +251,7 @@ public class BerandaFragment extends Fragment {
         notifPengumuman.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialogPengumuman.show();
+               startActivity(new Intent(getContext(),Pengumuman.class));
             }
         });
     }
@@ -292,195 +267,19 @@ public class BerandaFragment extends Fragment {
         notifPengumuman.setVisibility(View.GONE);
         notifCard.setVisibility(View.GONE);
     }
+    private void adaNotif(){
+        notifPengumuman.setVisibility(View.VISIBLE);
+        notifCard.setVisibility(View.VISIBLE);
+    }
 
 
     @Override
     public void onResume() {
         super.onResume();
-//        checkPengumuman();
+        checkKegiatanIdentitas();
 
     }
-    //Download FIle
-    public void downloadZipFile(String namafile) {
-        alertDialogPengumuman.dismiss();
-        alertDialogDownload.show();
-        Call<ResponseBody> call = apiInterface.downloadFile("assets/files/pengumuman/"+namafile);
 
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-
-//                    Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show();
-
-                    downloadZipFileTask = new BerandaFragment.DownloadZipFileTask();
-                    downloadZipFileTask.execute(response.body());
-
-                } else {
-                    Toast.makeText(getContext(), "File tidak ada", Toast.LENGTH_SHORT).show();
-                    alertDialogDownload.dismiss();
-//                    textHeaderDownload.setText("Ups Terjadi");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                t.printStackTrace();
-//                Log.e(TAG, t.getMessage());
-                alertDialogDownload.dismiss();
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public class DownloadZipFileTask extends AsyncTask<ResponseBody, Pair<Integer, Long>, String> {
-
-        String status="";
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(ResponseBody... urls) {
-            //Copy you logic to calculate progress and call
-            saveToDisk(urls[0], namafile);
-            return null;
-        }
-
-        protected void onProgressUpdate(Pair<Integer, Long>... progress) {
-
-            Log.d("API123", progress[0].second + " ");
-
-            if (progress[0].first == 100)
-//                Toast.makeText(getApplicationContext(), "File downloaded successfully", Toast.LENGTH_SHORT).show();
-                status = "berhasil";
-
-            if (progress[0].second > 0) {
-                int currentProgress = (int) ((double) progress[0].first / (double) progress[0].second * 100);
-                progressBar.setProgress(currentProgress);
-
-                textProgress.setText(currentProgress + "%");
-
-            }
-
-            if (progress[0].first == -1) {
-//                Toast.makeText(getApplicationContext(), "Download failed", Toast.LENGTH_SHORT).show();
-                status = "gagal";
-            }
-
-        }
-
-        public void doProgress(Pair<Integer, Long> progressDetails) {
-            publishProgress(progressDetails);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            textKeteranganDownload.setVisibility(View.VISIBLE);
-            textOKDownload.setVisibility(View.VISIBLE);
-            if(status.equals("berhasil")){
-                textHeaderDownload.setText("File berhasil diunduh");
-                textKeteranganDownload.setText("File '"+namafile+"' disimpan di folder Download pada Penyimpanan Internal.");
-            }
-            else{
-                textHeaderDownload.setText("File gagal diunduh");
-                textKeteranganDownload.setText("Harap periksa jaringan internet dan ruang bebas penyimpanan.");
-            }
-        }
-    }
-
-    public void saveToDisk(ResponseBody body, String filename) {
-        try {
-
-            File destinationFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename);
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(destinationFile);
-                byte data[] = new byte[4096];
-                int count;
-                int progress = 0;
-                long fileSize = body.contentLength();
-//                Log.d(TAG, "File Size=" + fileSize);
-                while ((count = inputStream.read(data)) != -1) {
-                    outputStream.write(data, 0, count);
-                    progress += count;
-                    Pair<Integer, Long> pairs = new Pair<>(progress, fileSize);
-                    downloadZipFileTask.doProgress(pairs);
-                    Log.d(TAG, "Progress: " + progress + "/" + fileSize + " >>>> " + (float) progress / fileSize);
-                }
-
-                outputStream.flush();
-
-                Log.d(TAG, destinationFile.getParent());
-                Pair<Integer, Long> pairs = new Pair<>(100, 100L);
-                downloadZipFileTask.doProgress(pairs);
-                return;
-            } catch (IOException e) {
-                e.printStackTrace();
-                Pair<Integer, Long> pairs = new Pair<>(-1, Long.valueOf(-1));
-                downloadZipFileTask.doProgress(pairs);
-                Log.d(TAG, "Failed to save the file!");
-                return;
-            } finally {
-                if (inputStream != null) inputStream.close();
-                if (outputStream != null) outputStream.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d(TAG, "Failed to save the file!");
-            return;
-        }
-    }
-
-    private void askForPermission(String permission, Integer requestCode) {
-        if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
-
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
-            }
-        } else if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_DENIED) {
-            Toast.makeText(getContext(), "Permission was denied", Toast.LENGTH_SHORT).show();
-        }
-    }
-    private void initialDialogDownload(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View view = getLayoutInflater().inflate(R.layout.dialog_download,null);
-
-        progressBar = (ProgressBar)  view.findViewById(R.id.progress);
-        textProgress = (TextView)  view.findViewById(R.id.text_progress);
-        textKeteranganDownload = (TextView) view.findViewById(R.id.text_keterangan_download);
-        textOKDownload = (TextView) view.findViewById(R.id.ok);
-        textHeaderDownload= (TextView) view.findViewById(R.id.text_header_download);
-
-        builder.setView(view);
-        alertDialogDownload = builder.create();
-        alertDialogDownload.setCancelable(false);
-
-        textOKDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialogDownload.dismiss();
-                textProgress.setText("0");
-                textHeaderDownload.setText("Mengunduh file, harap menunggu...");
-                progressBar.setProgress(0);
-                textOKDownload.setVisibility(View.GONE);
-                textKeteranganDownload.setVisibility(View.GONE);
-
-            }
-        });
-
-    }
 
     private void initialDialogPeringatan(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -514,6 +313,7 @@ public class BerandaFragment extends Fragment {
 
                     if(response.body().getStatus().equals("berhasil")){
                         kegiatan_identitas_diisi=true;
+                        checkPengumuman();
                     }else{
                         kegiatan_identitas_diisi=false;
                         alertDialogPeringatan.show();
@@ -528,6 +328,27 @@ public class BerandaFragment extends Fragment {
             @Override
             public void onFailure(Call<GetUserLogin> call, Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void checkPengumuman(){
+
+        Call<GetPengumuman> pengumumanCall = apiInterface.getPengumuman("pengumuman");
+        pengumumanCall.enqueue(new Callback<GetPengumuman>() {
+            @Override
+            public void onResponse(Call<GetPengumuman> call, Response<GetPengumuman> response) {
+                if (response.isSuccessful()){
+                    List<DataPengumuman> list = response.body().getListPengumuman();
+                    jumlah_pengumuman = list.size();
+                    notifCounter.setText(String.valueOf(jumlahNotif()));
+                    adaNotif();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetPengumuman> call, Throwable t) {
+
             }
         });
     }

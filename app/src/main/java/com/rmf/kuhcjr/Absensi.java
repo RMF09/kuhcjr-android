@@ -488,7 +488,9 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         CircleOptions circleOptions = new CircleOptions();
 
         circleOptions.center(latLng2);
-        circleOptions.radius(500);
+//        5km
+//        circleOptions.radius(500)
+        circleOptions.radius(35);
         circleOptions.fillColor(Color.parseColor("#6817A2B8"));
         circleOptions.strokeWidth(1);
         circleOptions.strokeColor(Color.parseColor("#17a2b8"));

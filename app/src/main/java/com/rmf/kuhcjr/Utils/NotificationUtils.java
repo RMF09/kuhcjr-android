@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
+import com.rmf.kuhcjr.Pengumuman;
 import com.rmf.kuhcjr.R;
 
 import java.text.ParseException;
@@ -39,15 +41,22 @@ public class NotificationUtils {
         CharSequence name = "pengunguman_kuh";// The user-visible name of the channel.
 
 //        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,99,intent,0);
+        Intent resultIntent  = new Intent(context, Pengumuman.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context,99,intent,0);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(99,PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE) ;
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context,CHANNEL_ID ) ;
+
         mBuilder.setContentTitle(title) ;
         mBuilder.setContentText(message) ;
         mBuilder.setLargeIcon(BitmapFactory. decodeResource (context.getResources() , R.drawable.app_iconkuh )) ;
         mBuilder.setSmallIcon(R.drawable.ic_stat_name ) ;
         mBuilder.setAutoCancel( true ) ;
         mBuilder.setContentIntent(pendingIntent);
+
         if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O ) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = new NotificationChannel( CHANNEL_ID , name , importance) ;
@@ -60,30 +69,30 @@ public class NotificationUtils {
 
     /* Method checks if the app is in background or not
      */
-    public static boolean isAppIsInBackground(Context context) {
-        boolean isInBackground = true;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
-            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
-                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    for (String activeProcess : processInfo.pkgList) {
-                        if (activeProcess.equals(context.getPackageName())) {
-                            isInBackground = false;
-                        }
-                    }
-                }
-            }
-        } else {
-            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
-            ComponentName componentInfo = taskInfo.get(0).topActivity;
-            if (componentInfo.getPackageName().equals(context.getPackageName())) {
-                isInBackground = false;
-            }
-        }
-
-        return isInBackground;
-    }
+//    public static boolean isAppIsInBackground(Context context) {
+//        boolean isInBackground = true;
+//        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+//            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+//            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+//                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+//                    for (String activeProcess : processInfo.pkgList) {
+//                        if (activeProcess.equals(context.getPackageName())) {
+//                            isInBackground = false;
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+//            ComponentName componentInfo = taskInfo.get(0).topActivity;
+//            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+//                isInBackground = false;
+//            }
+//        }
+//
+//        return isInBackground;
+//    }
 
     // Clears notification tray messages
     public static void clearNotifications(Context context) {
