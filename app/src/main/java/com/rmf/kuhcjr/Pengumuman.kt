@@ -25,6 +25,7 @@ import com.rmf.kuhcjr.Api.ApiClient
 import com.rmf.kuhcjr.Api.ApiInterface
 import com.rmf.kuhcjr.Data.DataPengumuman
 import com.rmf.kuhcjr.Data.GetPengumuman
+import com.rmf.kuhcjr.Utils.NotificationUtils
 import kotlinx.android.synthetic.main.activity_pengumuman.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -308,5 +309,13 @@ class Pengumuman : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // clear the notification area when the app is opened
+
+        // clear the notification area when the app is opened
+        NotificationUtils.clearNotifications(applicationContext)
+    }
 
 }

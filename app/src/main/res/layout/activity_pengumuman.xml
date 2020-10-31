@@ -61,6 +61,7 @@
                 android:layoutAnimation="@anim/layout_animation"
                 android:paddingBottom="90dp"
                 android:clipToPadding="false"
+                android:layout_marginHorizontal="26dp"
                 tools:listitem="@layout/item_notif"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
             <include
