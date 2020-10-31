@@ -32,6 +32,8 @@
                 android:id="@+id/isi_pengumuman"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/colorText"
                 android:text="Isi notifaikf ak jopapsdjjop"/>
             <LinearLayout
                 android:id="@+id/linear_layout_lampiran_file"

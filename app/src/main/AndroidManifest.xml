@@ -17,9 +17,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Permission to start Alarm on device reboot -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permission to start Alarm on device reboot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -30,21 +29,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AjukanPenilaian"
+        <activity android:name=".Pengumuman" android:configChanges="orientation|keyboard"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
+            </activity>
+        <activity
+            android:name=".AjukanPenilaian"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape"></activity>
-        <activity android:name=".EditTugas"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".EditTugas"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".DetailTugas"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DetailTugas"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".IsiPenilaian"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".IsiPenilaian"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".TambahKegiatanJabatan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TambahKegiatanJabatan"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HasilPenilaian"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -94,18 +103,16 @@
 
         <receiver android:name=".Services.AlarmReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
-
-        <!-- Will not be called unless the application explicitly enables it -->
-        <receiver android:name=".Services.DeviceRebootReceiver"
+        </receiver> <!-- Will not be called unless the application explicitly enables it -->
+        <receiver
+            android:name=".Services.DeviceRebootReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
-        <!-- Firebase Notifications -->
+        </receiver> <!-- Firebase Notifications -->
         <service android:name=".Services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -177,7 +184,7 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboard"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/AppTheme.BrandedLaunch"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
