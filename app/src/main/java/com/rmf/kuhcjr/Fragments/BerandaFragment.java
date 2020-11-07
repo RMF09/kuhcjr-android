@@ -338,10 +338,16 @@ public class BerandaFragment extends Fragment {
             @Override
             public void onResponse(Call<GetPengumuman> call, Response<GetPengumuman> response) {
                 if (response.isSuccessful()){
-                    List<DataPengumuman> list = response.body().getListPengumuman();
-                    jumlah_pengumuman = list.size();
-                    notifCounter.setText(String.valueOf(jumlahNotif()));
-                    adaNotif();
+                    if(response.body().getStatus().equals("berhasil")){
+
+                        List<DataPengumuman> list = response.body().getListPengumuman();
+                        jumlah_pengumuman = list.size();
+                        notifCounter.setText(String.valueOf(jumlahNotif()));
+                        adaNotif();
+                    }
+                    else{
+                        tidakAdaNotif();
+                    }
 
                 }
             }

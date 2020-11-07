@@ -113,6 +113,7 @@
                                         <ImageView
                                             android:layout_width="20dp"
                                             android:layout_height="20dp"
+                                            android:tint="@color/colorAzure"
                                             app:srcCompat="@drawable/ic_location_on_black_24dp" />
 
                                         <TextView
@@ -153,7 +154,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="match_parent"
                                             android:gravity="center_vertical"
-                                            android:text="Cek lokasi Anda saat ini "
+                                            android:text="Cek Lokasi Anda saat ini "
                                             android:textColor="@color/colorWhiteText" />
                                     </LinearLayout>
 
@@ -224,11 +225,12 @@
                                     android:id="@+id/waktu_masuk"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Absen masuk : 09.00" />
+                                    android:text="Absen masuk : -" />
                                 <TextView
+                                    android:id="@+id/waktu_pulang"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Absen pulang : 14.00"/>
+                                    android:text="Absen pulang : -"/>
 
 
                         </LinearLayout>

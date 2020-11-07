@@ -17,10 +17,7 @@ public class DateUtils {
             e.printStackTrace();
         }
         SimpleDateFormat output = new SimpleDateFormat("EEEE, dd MMMM yyyy");
-        String akhir = output.format(date);
-
-        return akhir;
-
+        return output.format(date);
     }
 
     public static String getTime(String time){
@@ -32,9 +29,7 @@ public class DateUtils {
             e.printStackTrace();
         }
         SimpleDateFormat output = new SimpleDateFormat("dd-MM-yyyy");
-        String akhir = output.format(date);
-
-        return akhir;
+        return output.format(date);
 
     }
 
@@ -47,10 +42,25 @@ public class DateUtils {
             e.printStackTrace();
         }
         SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
-        String akhir = output.format(date);
+        return output.format(date);
+    }
 
-        return akhir;
+    public static String getWaktuAbsen(String waktu){
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date date =null;
+        try {
+            date = simpleDateFormat.parse(waktu);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat output = new SimpleDateFormat("HH:mm");
+        return output.format(date);
+
+    }
+    public static String getTimeNow(){
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return  sdf.format(new Date());
     }
 
 }

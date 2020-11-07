@@ -2,16 +2,21 @@ package com.rmf.kuhcjr;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -35,14 +40,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -58,6 +69,9 @@ import com.rmf.kuhcjr.Data.GetAbsensiPegawai;
 import com.rmf.kuhcjr.Data.GetKantor;
 import com.rmf.kuhcjr.Data.GetPeminjamanKendaraan;
 import com.rmf.kuhcjr.Data.PostPutLembur;
+import com.rmf.kuhcjr.Services.LocationService;
+import com.rmf.kuhcjr.Utils.Constans;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,8 +92,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap gmap;
     private boolean dalamJangkauan =false,libur=false,initial=false,checkInOut=false,adaLembur=false;
     private String statusAbsensi,statusAbsensiLembur,tanggalLembur,mulaiLembur,selesaiLembur;
-    private int id=0,idAbsensiLembur=0, jamAwalAbsen=5,jamAkhirAbsen=10,statusLembur;
-    private String tanggalSekarang;
+    private int id=0,idAbsensiLembur=0, jamAwalAbsen=13,jamAkhirAbsen=17,statusLembur;
+    private String tanggalSekarang; //5 10
     private String actionAbsen;
 
     Location currentLocation;
@@ -97,7 +111,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
 
     //0 = saya,  1= kantor
-    int lihatLokasi = 0;
+    int lihatLokasi = -1;
 
     //API
     ApiInterface mApiInterface;
@@ -116,6 +130,13 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     //Masalah Jaringan Layout
     private LinearLayout linearMasalahJaringan;
     private TextView textERR,textMuatUlang;
+
+    private TextView textAbsen,textPulang;
+
+    private BroadcastReceiver broadcastReceiver;
+    Marker marker =null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,17 +181,16 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         mapView.onCreate(mapViewBundle);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-//        fetchLocation();
 
-//        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-//            return;
-//        }
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-//                2000,
-//                10, locationListenerGPS);
+        com.google.android.gms.location.LocationListener listener = new com.google.android.gms.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
 
+                Toast.makeText(Absensi.this, "lat : "+latitude+", long : "+longitude, Toast.LENGTH_SHORT).show();
+            }
+        };
 
     }
 
@@ -194,6 +214,9 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                 checkJadwalLibur();
             }
         });
+
+        textAbsen = findViewById(R.id.waktu_masuk);
+        textPulang = findViewById(R.id.waktu_pulang);
 
 
         this.actionUI();
@@ -222,7 +245,9 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 lihatLokasi =0;
+                marker=null;
                 fetchLocation();
+                startLocationService();
             }
         });
         cardCheckOfficeLocation.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +255,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
             public void onClick(View v) {
                 lihatLokasi =1;
                 fetchLocation();
+                stopLocationService();
             }
         });
 
@@ -425,6 +451,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         this.longt = longt;
         this.lihatLokasi = lihatLokasi;
         fetchLocation();
+        stopLocationService();
     }
 
     @Override
@@ -445,8 +472,14 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     protected void onResume() {
         super.onResume();
         mapView.onResume();
-        if(initial){
-            checkAbsensiHariIni();
+//        if(initial){
+//            checkAbsensiHariIni();
+//        }
+
+        if(lihatLokasi==0){
+            marker=null;
+            startLocationService();
+            fetchLocation();
         }
     }
 
@@ -465,6 +498,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     protected void onPause() {
         mapView.onPause();
         super.onPause();
+        stopLocationService();
     }
     @Override
     protected void onDestroy() {
@@ -477,15 +511,16 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
 
         googleMap.clear();
 
         LatLng latLng2 = new LatLng(lat,longt);
-        MarkerOptions markerOptions2 = new MarkerOptions().position(latLng2).title(namaKantor);
+        MarkerOptions markerOptions2 = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .position(latLng2).title(namaKantor);
 
         //Circle
-        CircleOptions circleOptions = new CircleOptions();
+        final CircleOptions circleOptions = new CircleOptions();
 
         circleOptions.center(latLng2);
 //        5km
@@ -495,34 +530,56 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         circleOptions.strokeWidth(1);
         circleOptions.strokeColor(Color.parseColor("#17a2b8"));
 
-        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
 
-        googleMap.addMarker(markerOptions);
+
+
         googleMap.addMarker(markerOptions2);
         googleMap.addCircle(circleOptions);
 
+
+
         if(lihatLokasi==0) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+            if(broadcastReceiver==null){
+                broadcastReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                        double lat = intent.getDoubleExtra("lat",0);
+                        double lng = intent.getDoubleExtra("long",0);
+
+                        LatLng latLng = new LatLng(lat, lng);
+                        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
+
+                        if(marker==null){
+                            marker = googleMap.addMarker(markerOptions);
+                        }
+                        marker.setPosition(markerOptions.getPosition());
+
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+
+                        float[] jarak  = new float[2];
+
+                        Location.distanceBetween(markerOptions.getPosition().latitude,markerOptions.getPosition().longitude,circleOptions.getCenter().latitude,circleOptions.getCenter().longitude,jarak);
+
+                        if(jarak[0] > circleOptions.getRadius()){
+                            dalamJangkauan=false;
+                        }
+                        else{
+                            dalamJangkauan=true;
+                        }
+                    }
+                };
+            }
+            registerReceiver(broadcastReceiver, new IntentFilter(Constans.ACTION_NAME));
         }
         else{
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng2));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng2, 18));
+
         }
 
-        float[] jarak  = new float[2];
 
-        Location.distanceBetween(markerOptions.getPosition().latitude,markerOptions.getPosition().longitude,circleOptions.getCenter().latitude,circleOptions.getCenter().longitude,jarak);
-
-        if(jarak[0] > circleOptions.getRadius()){
-//            Toast.makeText(this, "Diluar jangkauan", Toast.LENGTH_SHORT).show();
-            dalamJangkauan=false;
-        }
-        else{
-//            Toast.makeText(this, "Didalam jangkauan", Toast.LENGTH_SHORT).show();
-            dalamJangkauan=true;
-        }
     }
     private void fetchLocation() {
         if (ActivityCompat.checkSelfPermission(
@@ -531,6 +588,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
         }
+
+
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -646,44 +705,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
-//    private void checkWaktu(){
-//        textDialogAbsen.setText("Harap tunggu...");
-//        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.getCheckWaktu("waktu");
-//        callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
-//            @Override
-//            public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
-//                if(response.isSuccessful()){
-//                    String status = response.body().getStatus();
-//                    if(status.equals("berhasil")){
-//                        String message = response.body().getMessage();
-//                        if(statusAbsensi.equals("belum absen")){
-//                            if(Integer.valueOf(ambilJam(message,"y/M/d H:m:s","H"))<jamAkhirAbsen && Integer.valueOf(ambilJam(message,"y/M/d H:m:s","H"))>jamAwalAbsen ){
-//                                //CheckIN
-//                                checkIN();
-//                            }
-//                            else{
-//                                setFailedDialogAbsen(pesanTidakBisaAbsen);
-////                                Toast.makeText(Absensi.this, pesanTidakBisaAbsen, Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//
-//                    }else{
-//                        setFailedDialogAbsen("Gagal cek waktu server");
-//                    }
-//                }
-//                else {
-//                    setFailedDialogAbsen("Terjadi masalah pada Server");
-////                    Toast.makeText(Absensi.this, "Terjadi masalah pada Server", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<GetAbsensiPegawai> call, Throwable t) {
-//                setFailedDialogAbsen(t.getMessage());
-////                Toast.makeText(Absensi.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+
 
     private void checkAbsensiHariIni(){
         textDialog.setText("Memeriksa status absensi");
@@ -703,12 +725,23 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                         btnAbsen.setText("Absen Masuk Kantor");
                     }else if(statusAbsensi.equals("sudah absen")){
                         btnAbsen.setText("Absen Pulang Kantor");
-                        List<DataAbsensiPegawai> ambilID = response.body().getListDataAbsensiPegawai();
-                        id= ambilID.get(0).getId();
+
+                        List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
+                        textAbsen.setText(
+                                "Absen Masuk : "+
+                                DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
+
+                        id= data.get(0).getId();
 //                        Toast.makeText(Absensi.this, "ID : "+id, Toast.LENGTH_SHORT).show();
                     }else if(statusAbsensi.equals("sudah pulang")){
                         btnAbsen.setText("Anda Sudah Pulang");
                         btnAbsen.setEnabled(false);
+
+                        List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
+                        textAbsen.setText(
+                                "Absen Masuk : "+
+                                        DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
+                        textPulang.setText("Absen Pulang : "+ DateUtils.getWaktuAbsen(data.get(0).getCheck_out()));
                     }
                     checkJadwalLembur();
 
@@ -733,7 +766,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     }
     private void checkIN(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("in",username,String.valueOf(lat),String.valueOf(longt),namaKantor);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("in",username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -763,7 +796,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     private void checkOUT(){
         textDialogAbsen.setText("Harap tunggu...");
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("out",id,username,String.valueOf(lat),String.valueOf(longt),namaKantor);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("out",id,username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -791,7 +824,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
     private void checkINLembur(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("inlembur",username,String.valueOf(lat),String.valueOf(longt),namaKantor);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("inlembur",username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -819,7 +852,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     }
     private void checkOUTLembur(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("outlembur",idAbsensiLembur,username,String.valueOf(lat),String.valueOf(longt),namaKantor);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("outlembur",idAbsensiLembur,username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -1155,6 +1188,42 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         return akhir;
 
     }
+
+    private boolean isLocationServiceRunning(){
+        ActivityManager activityManager=
+                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if(activityManager !=null){
+            for(ActivityManager.RunningServiceInfo serviceInfo : activityManager.getRunningServices(Integer.MAX_VALUE)){
+                if(LocationService.class.getName().equals(serviceInfo.service.getClassName())){
+                    if(serviceInfo.foreground){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    private void startLocationService(){
+        if(!isLocationServiceRunning()){
+            Intent intent = new Intent(getApplicationContext(),LocationService.class);
+            intent.setAction(Constans.ACTION_START_LOCATION_SERVICE);
+            startService(intent);
+        }
+    }
+    private void stopLocationService(){
+        if(isLocationServiceRunning()){
+            Intent intent = new Intent(getApplicationContext(),LocationService.class);
+            intent.setAction(Constans.ACTION_STOP_LOCATION_SERVICE);
+            startService(intent);
+        }
+    }
+
+
+
+
+
 
 
 
