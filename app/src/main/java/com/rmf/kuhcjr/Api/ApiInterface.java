@@ -252,14 +252,18 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("AbsensiPegawai")
-    Call<GetAbsensiPegawai> CheckIn(@Field("check") String check,@Field("username") String username,
-                                    @Field("lat_ci") String lat_ci,@Field("lng_ci") String lng_ci,
-                                    @Field("lokasi_ci") String lokasi_ci);
+    Call<GetAbsensiPegawai> CheckIn(@Field("check") String check,
+                                    @Field("username") String username,
+                                    @Field("lat_ci") String lat_ci,
+                                    @Field("lng_ci") String lng_ci,
+                                    @Field("lokasi_ci") String lokasi_ci,
+                                    @Field("waktu") String waktu);
     @FormUrlEncoded
     @POST("AbsensiPegawai")
     Call<GetAbsensiPegawai> CheckOut(@Field("check") String check,@Field("id") int id,
                                      @Field("username") String username,@Field("lat_co") String lat_co,
-                                     @Field("lng_co") String lng_co, @Field("lokasi_co") String lokasi_co);
+                                     @Field("lng_co") String lng_co, @Field("lokasi_co") String lokasi_co,
+                                     @Field("waktu") String waktu);
     @FormUrlEncoded
     @POST("AbsensiPegawai")
     Call<GetAbsensiPegawai> CheckJadwaLibur(@Field("check") String check);

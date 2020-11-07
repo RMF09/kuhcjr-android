@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 //    public static final String BASE_URL = "https://kuh.public-cjr.com/";
-//    public static final String BASE_URL = "https://ekinerja.kantorurusanhaji.com/";
-public static final String BASE_URL = "http://192.168.137.1/kemenag-prod/";
+    public static final String BASE_URL = "https://ekinerja.kantorurusanhaji.com/";
+//public static final String BASE_URL = "http://192.168.137.1/kemenag-prod/";
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         if (retrofit==null) {
