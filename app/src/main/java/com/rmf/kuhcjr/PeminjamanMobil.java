@@ -64,7 +64,7 @@ public class PeminjamanMobil extends AppCompatActivity {
 
     private FloatingActionButton fab;
 
-    private AlertDialog alertDialog, alertDialogWarning;
+    private AlertDialog alertDialog, alertDialogWarning,alertDialogStatus;
 
     //Masalah Jaringan Layout
     private LinearLayout linearMasalahJaringan;
@@ -73,6 +73,8 @@ public class PeminjamanMobil extends AppCompatActivity {
     //Belum Ada data
     private LinearLayout linearBelumAdaData;
     private TextView textBelumAdaData;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,7 @@ public class PeminjamanMobil extends AppCompatActivity {
         initialUI();
         initialDialog();
         initialDialogWarning();
+        initialDialogStatus();
 
         qrScan = new IntentIntegrator(this);
         qrScan.setOrientationLocked(false);
@@ -173,8 +176,7 @@ public class PeminjamanMobil extends AppCompatActivity {
 
                     String idKendaraan = obj.getString("id");
 
-
-                    Toast.makeText(this, "ID : " + idKendaraan, Toast.LENGTH_SHORT).show();
+                    Log.d("JSON", "ID : " + idKendaraan);
                     insertData(idKendaraan,editTujuanPeminjaman.getText().toString());
 
                 } catch (JSONException e) {
@@ -284,6 +286,24 @@ public class PeminjamanMobil extends AppCompatActivity {
         });
 
     }
+
+    private void initialDialogStatus() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View view = getLayoutInflater().inflate(R.layout.dialog_status_peminjaman, null);
+
+        TextView textOK =  view.findViewById(R.id.text_ok);
+        builder.setView(view);
+        builder.setCancelable(true);
+        alertDialogStatus = builder.create();
+
+        textOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogStatus.dismiss();
+            }
+        });
+
+    }
     private void initialDialogWarning() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View view = getLayoutInflater().inflate(R.layout.dialog_peringatan, null);
@@ -362,7 +382,8 @@ public class PeminjamanMobil extends AppCompatActivity {
                     String status = response.body().getStatus();
                     if(status.equals("berhasil")){
 
-                        Toast.makeText(PeminjamanMobil.this, status, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(PeminjamanMobil.this, status, Toast.LENGTH_SHORT).show();
+                        alertDialogStatus.show();
                         refreshData(false);
                     }else{
                         Toast.makeText(PeminjamanMobil.this, "Gagal menambahkan data", Toast.LENGTH_SHORT).show();

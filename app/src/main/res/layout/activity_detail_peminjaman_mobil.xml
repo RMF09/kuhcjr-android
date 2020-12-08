@@ -87,6 +87,16 @@
                                 android:text="09:04:00"
                                 android:layout_weight="1"/>
                         </TableRow>
+                        <TableRow>
+                            <TextView
+                                android:text="Tujuan Peminjaman"/>
+                            <TextView
+                                android:text=" : "/>
+                            <TextView
+                                android:id="@+id/tujuan"
+                                android:text="Untuk keperluan dinas"
+                                android:layout_weight="1"/>
+                        </TableRow>
                     </TableLayout>
                 </LinearLayout>
 

@@ -92,7 +92,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap gmap;
     private boolean dalamJangkauan =false,libur=false,initial=false,checkInOut=false,adaLembur=false;
     private String statusAbsensi,statusAbsensiLembur,tanggalLembur,mulaiLembur,selesaiLembur;
-    private int id=0,idAbsensiLembur=0, jamAwalAbsen=13,jamAkhirAbsen=17,statusLembur;
+    private int id=0,idAbsensiLembur=0, jamAwalAbsen=5,jamAkhirAbsen=10,statusLembur;
     private String tanggalSekarang; //5 10
     private String actionAbsen;
 
@@ -258,8 +258,6 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                 stopLocationService();
             }
         });
-
-
 
 
 
@@ -530,13 +528,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         circleOptions.strokeWidth(1);
         circleOptions.strokeColor(Color.parseColor("#17a2b8"));
 
-
-
-
         googleMap.addMarker(markerOptions2);
         googleMap.addCircle(circleOptions);
-
-
 
         if(lihatLokasi==0) {
             if(broadcastReceiver==null){

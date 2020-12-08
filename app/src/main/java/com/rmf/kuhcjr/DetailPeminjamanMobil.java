@@ -13,10 +13,10 @@ import android.widget.TextView;
 public class DetailPeminjamanMobil extends AppCompatActivity {
 
 
-    private String kodeKendaraan,merk,nomorPolisi,tanggal,waktu,kategori;
+    private String kodeKendaraan,merk,nomorPolisi,tanggal,waktu,kategori,tujuan;
     //UI
     private TextView textHeader;
-    private TextView textKodeKendaraan,textMerk,textNomorPolisi,textTanggal,textWaktu, fieldTanggal,fieldWaktu;
+    private TextView textTujuan, textKodeKendaraan,textMerk,textNomorPolisi,textTanggal,textWaktu, fieldTanggal,fieldWaktu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class DetailPeminjamanMobil extends AppCompatActivity {
         tanggal = getIntent().getStringExtra("tanggal");
         waktu= getIntent().getStringExtra("waktu");
         kategori= getIntent().getStringExtra("kategori");
+        tujuan = getIntent().getStringExtra("tujuan");
 
         initialUI();
     }
@@ -57,6 +58,7 @@ public class DetailPeminjamanMobil extends AppCompatActivity {
 
         fieldTanggal =(TextView) findViewById(R.id.tanggal);
         fieldWaktu =(TextView) findViewById(R.id.waktu);
+        textTujuan = findViewById(R.id.tujuan);
 
         if(kategori.equals("pengembalian")){
             textHeader.setText("Detail Pengembalian Mobil");
@@ -69,6 +71,7 @@ public class DetailPeminjamanMobil extends AppCompatActivity {
         textNomorPolisi.setText(nomorPolisi);
         textTanggal.setText(tanggal);
         textWaktu.setText(waktu);
+        textTujuan.setText(tujuan);
     }
 
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {

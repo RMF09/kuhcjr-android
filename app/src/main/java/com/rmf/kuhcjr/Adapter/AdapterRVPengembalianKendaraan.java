@@ -42,13 +42,14 @@ public class AdapterRVPengembalianKendaraan extends RecyclerView.Adapter<Adapter
         final String waktu = checkTime(mDPK.get(position).getTime_pengembalian());
         final String nomorPolisi = mDPK.get(position).getNomor_polisi();
         final String foto = mDPK.get(position).getFoto();
+        final String peruntukan = mDPK.get(position).getPeruntukan();
 
 
         Picasso.get().load("http://kuh.public-cjr.com/assets/images/kendaraan/"+foto).into(holder.imageView);
 //        Glide.with(holder.itemView).load("http://kuh.public-cjr.com/assets/images/kendaraan/"+foto).into(holder.imageView);
 
-        holder.kodeKendaraan.setText("Kode Kendaraan : " + kodeKendaraan);
-        holder.merk.setText("Merk : " + merk);
+        holder.kodeKendaraan.setText( kodeKendaraan);
+        holder.merk.setText(merk);
         holder.tanggalPengembalian.setText( tanggal);
         holder.waktuPengembalian.setText(waktu);
         holder.cardview.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +62,7 @@ public class AdapterRVPengembalianKendaraan extends RecyclerView.Adapter<Adapter
                 intent.putExtra("waktu", waktu);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("nomor_polisi", nomorPolisi);
+                intent.putExtra("tujuan", peruntukan);
                 view.getContext().startActivity(intent);
             }
         });

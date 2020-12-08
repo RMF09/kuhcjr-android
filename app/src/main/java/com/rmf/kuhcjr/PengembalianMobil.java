@@ -38,6 +38,7 @@ import com.rmf.kuhcjr.Data.PostPutPeminjamanKendaraan;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class PengembalianMobil extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter2;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    AlertDialog alertDialogWarning;
+    AlertDialog alertDialogWarning,alertDialogStatus;
 
     //Masalah Jaringan Layout
     private LinearLayout linearMasalahJaringan;
@@ -67,6 +68,9 @@ public class PengembalianMobil extends AppCompatActivity {
     //Belum Ada data
     private LinearLayout linearBelumAdaData;
     private TextView textBelumAdaData;
+
+    private TextView textKeterangan;
+    List<DataPeminjamanKendaraan> dataPK = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +91,30 @@ public class PengembalianMobil extends AppCompatActivity {
         }
         initialUI();
         initialDialogWarning();
+        initialDialogStatus();
 
         qrScan = new IntentIntegrator(this);
         qrScan.setOrientationLocked(false);
         qrScan.setPrompt("");
+    }
+
+    private void initialDialogStatus() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View view = getLayoutInflater().inflate(R.layout.dialog_status_peminjaman, null);
+
+        textKeterangan =  view.findViewById(R.id.text_keterangan_status_peminjaman);
+        TextView textOK =  view.findViewById(R.id.text_ok);
+
+        builder.setView(view);
+        builder.setCancelable(true);
+        alertDialogStatus = builder.create();
+
+        textOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialogStatus.dismiss();
+            }
+        });
     }
 
     private void initialUI(){
@@ -161,8 +185,7 @@ public class PengembalianMobil extends AppCompatActivity {
 
                     String idKendaraan = obj.getString("id");
 //                    String namaKendaraan= obj.getString("namaKendaraan");
-
-                    Toast.makeText(this, "ID : "+idKendaraan, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "ID : "+idKendaraan, Toast.LENGTH_SHORT).show();
                     kembalikanMobil(idKendaraan);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -250,8 +273,9 @@ public class PengembalianMobil extends AppCompatActivity {
 
                     String status = response.body().getStatus();
                     if(status.equals("mobil berhasil dikembalikan")){
-
-                        Toast.makeText(PengembalianMobil.this, status, Toast.LENGTH_SHORT).show();
+                        textKeterangan.setText("Mobil berhasil dikembalikan");
+                        alertDialogStatus.show();
+                        //Toast.makeText(PengembalianMobil.this, status, Toast.LENGTH_SHORT).show();
                         refreshData();
                     }else{
                         Toast.makeText(PengembalianMobil.this, "mobil gagal dikembalikan", Toast.LENGTH_SHORT).show();
@@ -284,8 +308,8 @@ public class PengembalianMobil extends AppCompatActivity {
                         Toast.makeText(PengembalianMobil.this, "Silahkan pinjam kendaraan terlebih dahulu", Toast.LENGTH_SHORT).show();
                     }
                     else{
-
-                        List<DataPeminjamanKendaraan> dataPK = response.body().getDataPeminjamanKendaraan();
+                        dataPK.clear();
+                        dataPK = response.body().getDataPeminjamanKendaraan();
 
                         String date_updated= dataPK.get(0).getDate_updated();
 

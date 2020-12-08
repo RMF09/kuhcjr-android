@@ -35,13 +35,13 @@ public class AdapterRVPeminjamanKendaraan extends RecyclerView.Adapter<AdapterRV
 
     @Override
     public void onBindViewHolder (MyViewHolder holder,final int position){
-        final int nomor = position+1;
         final String kodeKendaraan = mDPK.get(position).getKode_kendaraan();
         final String merk = mDPK.get(position).getMerk();
         final String tanggal = getDate(mDPK.get(position).getTanggal()) ;
         final String waktu =  getTime(mDPK.get(position).getTime());
         final String nomorPolisi = mDPK.get(position).getNomor_polisi();
         final String foto = mDPK.get(position).getFoto();
+        final String peruntukan = mDPK.get(position).getPeruntukan();
 
         Picasso.get().load("http://kuh.public-cjr.com/assets/images/kendaraan/"+foto).into(holder.imageView);
 //        Glide.with(holder.itemView).load("http://kuh.public-cjr.com/assets/images/kendaraan/"+foto).into(holder.imageView);
@@ -62,6 +62,7 @@ public class AdapterRVPeminjamanKendaraan extends RecyclerView.Adapter<AdapterRV
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("waktu", waktu);
                 intent.putExtra("nomor_polisi", nomorPolisi);
+                intent.putExtra("tujuan", peruntukan);
                 view.getContext().startActivity(intent);
             }
         });
