@@ -183,7 +183,7 @@ public class PengembalianMobil extends AppCompatActivity {
                     //converting the data to json
                     JSONObject obj = new JSONObject(result.getContents());
 
-                    String idKendaraan = obj.getString("id");
+                    String idKendaraan = obj.getString("kendaraan-id");
 //                    String namaKendaraan= obj.getString("namaKendaraan");
 //                    Toast.makeText(this, "ID : "+idKendaraan, Toast.LENGTH_SHORT).show();
                     kembalikanMobil(idKendaraan);
