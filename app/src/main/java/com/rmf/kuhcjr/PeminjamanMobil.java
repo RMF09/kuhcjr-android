@@ -170,26 +170,27 @@ public class PeminjamanMobil extends AppCompatActivity {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
             } else {
                 //if qr contains data
-                try {
+//                try {
                     //converting the data to json
-                    JSONObject obj = new JSONObject(result.getContents());
+//                    JSONObject obj = new JSONObject(result.getContents());
 
-                    String idKendaraan = obj.getString("id");
+//                    String idKendaraan = obj.getString("id");
+                    String idKendaraan = result.getContents();
 
                     String[] parts = idKendaraan.split("-");
                     String idValue = parts[1];
 
-                    Log.d("JSON", "ID : " + idKendaraan +", idVal" +idValue);
+                    Log.d("JSON", "ID : " + idKendaraan +", idVal " +idValue);
                     insertData(idValue,editTujuanPeminjaman.getText().toString());
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    //if control comes here
-                    //that means the encoded format not matches
-                    //in this case you can display whatever data is available on the qrcode
-                    //to a toast
-                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
-                }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+////                    if control comes here
+////                    that means the encoded format not matches
+////                    in this case you can display whatever data is available on the qrcode
+////                    to a toast
+//                    Toast.makeText(this,"Cant Read "+ result.getContents(), Toast.LENGTH_LONG).show();
+//                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
