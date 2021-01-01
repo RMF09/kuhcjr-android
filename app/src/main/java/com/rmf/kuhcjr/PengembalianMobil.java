@@ -183,10 +183,12 @@ public class PengembalianMobil extends AppCompatActivity {
                     //converting the data to json
                     JSONObject obj = new JSONObject(result.getContents());
 
-                    String idKendaraan = obj.getString("kendaraan-id");
-//                    String namaKendaraan= obj.getString("namaKendaraan");
-//                    Toast.makeText(this, "ID : "+idKendaraan, Toast.LENGTH_SHORT).show();
-                    kembalikanMobil(idKendaraan);
+                    String idKendaraan = obj.getString("id");
+                    String[] parts = idKendaraan.split("-");
+                    String idValue = parts[1];
+
+                    Log.d("JSON", "ID : " + idKendaraan +", idVal" +idValue);
+                    kembalikanMobil(idValue);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     //if control comes here
@@ -223,6 +225,8 @@ public class PengembalianMobil extends AppCompatActivity {
 
                     if(status.equals("berhasil")){
                         List<DataPeminjamanKendaraan> PKList = response.body().getDataPeminjamanKendaraan();
+
+                        Toast.makeText(PengembalianMobil.this, PKList.get(0).getFoto(), Toast.LENGTH_SHORT).show();
                         Collections.reverse(PKList);
                         mAdapter2 = new AdapterRVPengembalianKendaraan(PKList);
 //                        mAdapter2.notifyDataSetChanged();

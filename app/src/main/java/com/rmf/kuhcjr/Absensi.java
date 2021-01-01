@@ -112,6 +112,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
     //0 = saya,  1= kantor
     int lihatLokasi = -1;
+    boolean checkLokasiSaya=false;
 
     //API
     ApiInterface mApiInterface;
@@ -182,15 +183,6 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        com.google.android.gms.location.LocationListener listener = new com.google.android.gms.location.LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-
-                Toast.makeText(Absensi.this, "lat : "+latitude+", long : "+longitude, Toast.LENGTH_SHORT).show();
-            }
-        };
 
     }
 
@@ -248,6 +240,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                 marker=null;
                 fetchLocation();
                 startLocationService();
+                checkLokasiSaya=true;
             }
         });
         cardCheckOfficeLocation.setOnClickListener(new View.OnClickListener() {
@@ -256,6 +249,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                 lihatLokasi =1;
                 fetchLocation();
                 stopLocationService();
+                checkLokasiSaya=false;
             }
         });
 
@@ -264,22 +258,24 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         btnAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dalamJangkauan){
-                    checkInOut=true;
-                    if(statusAbsensi.equals("sudah absen")){
-                        actionAbsen = "check_out";
+                if(checkLokasiSaya){
+                    if(dalamJangkauan){
+                        checkInOut=true;
+                        if(statusAbsensi.equals("sudah absen")){
+                            actionAbsen = "check_out";
+                        }
+                        else{
+                            actionAbsen = "check_in";
+                        }
                         showDialogAbsen();
-//                        checkOUT();
+                    }else{
+                        Toast.makeText(Absensi.this, "Tidak dapat mengabsen karena Anda diluar jangkauan kantor", Toast.LENGTH_SHORT).show();
                     }
-                    else{
-                        //checkin
-                        actionAbsen = "check_in";
-                        showDialogAbsen();
-//                        checkWaktu();
-                    }
-                }else{
-                    Toast.makeText(Absensi.this, "Tidak dapat mengabsen karena Anda diluar jangkauan kantor", Toast.LENGTH_SHORT).show();
                 }
+                else{
+                    Toast.makeText(Absensi.this, "Mohon Tekan Cek Lokasi Anda terlebih dahulu", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -353,20 +349,25 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         textYaDialogAbsesn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(actionAbsen.equals("check_in")){
-                    checkWaktu();
-                }else if(actionAbsen.equals("check_out")){
-                    checkOUT();
-                }else if(actionAbsen.equals("check_in_lembur")){
-                    checkWaktuLembur("in");
-                }
-                else if(actionAbsen.equals("check_out_lembur")){
-                    checkWaktuLembur("out");
-                }else{
-                    //OK button
-                    alertDialogAbsen.dismiss();
-                    textBatalDialogAbsen.setVisibility(View.INVISIBLE);
-                    textYaDialogAbsesn.setText("YA");
+                switch (actionAbsen) {
+                    case "check_in":
+                        checkWaktu();
+                        break;
+                    case "check_out":
+                        checkOUT();
+                        break;
+                    case "check_in_lembur":
+                        checkWaktuLembur("in");
+                        break;
+                    case "check_out_lembur":
+                        checkWaktuLembur("out");
+                        break;
+                    default:
+                        //OK button
+                        alertDialogAbsen.dismiss();
+                        textBatalDialogAbsen.setVisibility(View.INVISIBLE);
+                        textYaDialogAbsesn.setText("YA");
+                        break;
                 }
             }
         });
@@ -967,7 +968,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                             adaLembur=false;
                             //Belum Ada data lembur yang Disetujui
                             initial=true;
-                            if(checkInOut==false){
+                            if(!checkInOut){
                                 loadDataKantor();
                             }
                         }
@@ -976,7 +977,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                         adaLembur=false;
                         //Belum Ada data lembur
                        initial=true;
-                       if(checkInOut==false){
+                       if(!checkInOut){
                             loadDataKantor();
                         }
 
@@ -1068,7 +1069,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                             btnAbsenLembur.setVisibility(View.GONE);
                         }
                         initial=true;
-                        if(checkInOut==false){
+                        if(!checkInOut){
                             loadDataKantor();
                         }
 

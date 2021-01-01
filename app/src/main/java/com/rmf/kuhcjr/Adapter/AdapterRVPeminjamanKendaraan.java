@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rmf.kuhcjr.Api.ApiClient;
 import com.rmf.kuhcjr.Data.DataPeminjamanKendaraan;
 import com.rmf.kuhcjr.DetailPeminjamanMobil;
 import com.rmf.kuhcjr.R;
@@ -43,7 +44,7 @@ public class AdapterRVPeminjamanKendaraan extends RecyclerView.Adapter<AdapterRV
         final String foto = mDPK.get(position).getFoto();
         final String peruntukan = mDPK.get(position).getPeruntukan();
 
-        Picasso.get().load("http://kuh.public-cjr.com/assets/images/kendaraan/"+foto).into(holder.imageView);
+        Picasso.get().load(ApiClient.BASE_URL+"assets/images/kendaraan/"+foto).into(holder.imageView);
 //        Glide.with(holder.itemView).load("http://kuh.public-cjr.com/assets/images/kendaraan/"+foto).into(holder.imageView);
 //        holder.imageView.setIm
 //        holder.nomor.setText(String.valueOf(nomor));

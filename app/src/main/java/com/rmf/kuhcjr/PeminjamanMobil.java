@@ -174,10 +174,13 @@ public class PeminjamanMobil extends AppCompatActivity {
                     //converting the data to json
                     JSONObject obj = new JSONObject(result.getContents());
 
-                    String idKendaraan = obj.getString("kendaraan-id");
+                    String idKendaraan = obj.getString("id");
 
-                    Log.d("JSON", "ID : " + idKendaraan);
-                    insertData(idKendaraan,editTujuanPeminjaman.getText().toString());
+                    String[] parts = idKendaraan.split("-");
+                    String idValue = parts[1];
+
+                    Log.d("JSON", "ID : " + idKendaraan +", idVal" +idValue);
+                    insertData(idValue,editTujuanPeminjaman.getText().toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
