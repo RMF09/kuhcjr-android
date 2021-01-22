@@ -63,4 +63,13 @@ public class DateUtils {
         return  sdf.format(new Date());
     }
 
+    public static String getDateDB(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return  sdf.format(new Date());
+    }
+    public static String getDateAndTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return  sdf.format(new Date());
+    }
+
 }

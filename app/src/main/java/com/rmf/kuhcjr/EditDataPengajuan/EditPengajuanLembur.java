@@ -418,9 +418,10 @@ public class EditPengajuanLembur extends AppCompatActivity {
             RequestBody metodeBody = RequestBody.create(MediaType.parse("text/plain"), metode);
             RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), username);
             RequestBody filePSBody = RequestBody.create(MediaType.parse("text/plain"), this.file);
+            RequestBody dateUpdatedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
 
 
-            Call<PostPutLembur> LemburCall = apiInterface.putLembur(requestFile,idBody,tanggalBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernameBody,filePSBody);
+            Call<PostPutLembur> LemburCall = apiInterface.putLembur(requestFile,idBody,tanggalBody,dateUpdatedBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernameBody,filePSBody);
             LemburCall.enqueue(new Callback<PostPutLembur>() {
                 @Override
                 public void onResponse(Call<PostPutLembur> call, Response<PostPutLembur>

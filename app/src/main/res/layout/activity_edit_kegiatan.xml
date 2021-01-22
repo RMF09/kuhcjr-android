@@ -206,6 +206,6 @@
         app:layout_anchorGravity="right|bottom|end"
         android:layout_marginRight="26dp"
         android:tint="@color/colorWhiteText"
-        app:srcCompat="@drawable/ic_edit_black_24dp"/>
+        app:srcCompat="@drawable/ic_baseline_save_24"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -51,6 +51,7 @@ import com.rmf.kuhcjr.FileUtils;
 import com.rmf.kuhcjr.Pengajuan.PengajuanCuti;
 import com.rmf.kuhcjr.R;
 import com.rmf.kuhcjr.SharedPrefs;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -298,8 +299,10 @@ public class TambahDataPengajuanCuti extends AppCompatActivity {
             RequestBody uraianBody = RequestBody.create(MediaType.parse("text/plain"), uraian);
             RequestBody metodeBody = RequestBody.create(MediaType.parse("text/plain"), "insert");
             RequestBody usernamaBody = RequestBody.create(MediaType.parse("text/plain"), username);
+            RequestBody tanggalBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateDB());
+            RequestBody dateAddedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
 
-            Call<PostPutCuti> CutiCall = apiInterface.postCuti(requestFile,mulaiBody,selesaiBody,uraianBody,metodeBody,usernamaBody);
+            Call<PostPutCuti> CutiCall = apiInterface.postCuti(requestFile,tanggalBody,dateAddedBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernamaBody);
             CutiCall.enqueue(new Callback<PostPutCuti>() {
                 @Override
                 public void onResponse(Call<PostPutCuti> call, Response<PostPutCuti>

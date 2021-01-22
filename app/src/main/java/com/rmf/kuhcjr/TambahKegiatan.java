@@ -35,6 +35,7 @@ import com.rmf.kuhcjr.Api.ApiInterface;
 import com.rmf.kuhcjr.Data.PostPutKegiatan;
 import com.rmf.kuhcjr.Data.PostPutPeminjamanKendaraan;
 import com.rmf.kuhcjr.TambahDataPengajuan.TambahDataPengajuanLembur;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -170,7 +171,7 @@ public class TambahKegiatan extends AppCompatActivity {
 
     private void insertData(String tanggal,String kegiatan,String hasil,int jumlah, String satuan,String keterangan){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<PostPutKegiatan> PKCall = mApiInterface.postKegiatan(tanggal,username,kegiatan,hasil,jumlah,satuan,keterangan);
+        Call<PostPutKegiatan> PKCall = mApiInterface.postKegiatan(tanggal,username,kegiatan,hasil,jumlah,satuan,keterangan, DateUtils.getDateAndTime());
         PKCall.enqueue(new Callback<PostPutKegiatan>() {
             @Override
             public void onResponse(Call<PostPutKegiatan> call, Response<PostPutKegiatan>

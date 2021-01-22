@@ -34,6 +34,7 @@ import com.rmf.kuhcjr.Api.ApiClient;
 import com.rmf.kuhcjr.Api.ApiInterface;
 import com.rmf.kuhcjr.Data.DataPeminjamanKendaraan;
 import com.rmf.kuhcjr.Data.PostPutPeminjamanKendaraan;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 
 import org.json.JSONException;
@@ -335,7 +336,8 @@ public class PeminjamanMobil extends AppCompatActivity {
 
     }
     private void checkDataTerakhir(){
-        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("check","pegawai","","");
+        String username = SharedPrefs.getInstance(this).LoggedInUser();
+        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("check",username,"","", DateUtils.getDateAndTime(),DateUtils.getDateDB(),DateUtils.getTimeNow());
         PKCall.enqueue(new Callback<PostPutPeminjamanKendaraan>() {
             @Override
             public void onResponse(Call<PostPutPeminjamanKendaraan> call, Response<PostPutPeminjamanKendaraan>
@@ -375,7 +377,9 @@ public class PeminjamanMobil extends AppCompatActivity {
     }
 
     private void insertData(String idKendaraan,String tujuan){
-        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("0","pegawai",idKendaraan,tujuan);
+
+        String username = SharedPrefs.getInstance(this).LoggedInUser();
+        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("0",username,idKendaraan,tujuan, DateUtils.getDateAndTime(),DateUtils.getDateDB(),DateUtils.getTimeNow());
         PKCall.enqueue(new Callback<PostPutPeminjamanKendaraan>() {
             @Override
             public void onResponse(Call<PostPutPeminjamanKendaraan> call, Response<PostPutPeminjamanKendaraan>

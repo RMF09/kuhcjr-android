@@ -37,21 +37,6 @@ import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 public interface ApiInterface {
-    @GET("kontak")
-    Call<GetKontak> getKontak();
-    @FormUrlEncoded
-    @POST("kontak")
-    Call<PostPutKontak> postKontak(@Field("nama") String nama,
-                                   @Field("nomor") String nomor);
-    @FormUrlEncoded
-    @PUT("kontak")
-    Call<PostPutKontak> putKontak(@Field("id") int id,
-                                     @Field("nama") String nama,
-                                     @Field("nomor") String nomor);
-    @FormUrlEncoded
-    @HTTP(method = "DELETE", path = "kontak", hasBody = true)
-    Call<PostPutKontak> deleteKontak(@Field("id") int id);
-
 //    L E M B U R
     @FormUrlEncoded
     @POST("Lembur")
@@ -63,14 +48,14 @@ public interface ApiInterface {
 
     @Multipart
     @POST("Lembur")
-    Call<PostPutLembur> postLembur(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("tanggal") RequestBody tanggal,
+    Call<PostPutLembur> postLembur(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("tanggal") RequestBody tanggal,@Part("date_added") RequestBody date_added,
                                    @Part("mulai") RequestBody mulai,@Part("selesai") RequestBody selesai,
                                    @Part("uraian") RequestBody uraian,@Part("metode") RequestBody metode,
                                    @Part("username") RequestBody username);
 
     @Multipart
     @POST("Lembur")
-    Call<PostPutLembur> putLembur(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("id") RequestBody id,@Part("tanggal") RequestBody tanggal,
+    Call<PostPutLembur> putLembur(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("id") RequestBody id,@Part("tanggal") RequestBody tanggal,@Part("date_updated") RequestBody date_updated,
                                    @Part("mulai") RequestBody mulai,@Part("selesai") RequestBody selesai,
                                   @Part("uraian") RequestBody uraian,@Part("metode") RequestBody metode,
                                   @Part("username") RequestBody username,@Part("file_pengajuan") RequestBody file_pengajuan_sebelumnya);
@@ -95,14 +80,14 @@ public interface ApiInterface {
 
     @Multipart
     @POST("Cuti")
-    Call<PostPutCuti> postCuti(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,
+    Call<PostPutCuti> postCuti(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("tanggal") RequestBody tanggal,@Part("date_added") RequestBody date_added,
                                @Part("mulai") RequestBody mulai,@Part("selesai") RequestBody selesai,
                                @Part("uraian") RequestBody uraian,@Part("metode") RequestBody metode,
                                @Part("username") RequestBody username);
 
     @Multipart
     @POST("Cuti")
-    Call<PostPutCuti> putCuti(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,  @Part("id") RequestBody id,
+    Call<PostPutCuti> putCuti(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,  @Part("id") RequestBody id, @Part("date_updated") RequestBody date_updated,
                                @Part("mulai") RequestBody mulai,@Part("selesai") RequestBody selesai,
                               @Part("uraian") RequestBody uraian,@Part("metode") RequestBody metode,
                              @Part("username") RequestBody username, @Part("file_pengajuan") RequestBody file_pengajuan_sebelumnya);
@@ -122,14 +107,14 @@ public interface ApiInterface {
 
     @Multipart
     @POST("Dinas")
-    Call<PostPutPerjalananDinas> postPerjalananDinas(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("tanggal") RequestBody tanggal,
+    Call<PostPutPerjalananDinas> postPerjalananDinas(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("tanggal") RequestBody tanggal,@Part("date_added") RequestBody date_added,
                                    @Part("mulai") RequestBody mulai,@Part("selesai") RequestBody selesai,@Part("tujuan") RequestBody tujuan,
                                                      @Part("uraian") RequestBody uraian,@Part("metode") RequestBody metode,
                                                      @Part("username") RequestBody username);
 
     @Multipart
     @POST("Dinas")
-    Call<PostPutPerjalananDinas> putPerjalananDinas(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("id") RequestBody id,@Part("tanggal") RequestBody tanggal,
+    Call<PostPutPerjalananDinas> putPerjalananDinas(@Part("file\"; filename=\"myfile.pdf\"")RequestBody file,@Part("id") RequestBody id,@Part("tanggal") RequestBody tanggal,@Part("date_updated") RequestBody date_updated,
                                                      @Part("mulai") RequestBody mulai,@Part("selesai") RequestBody selesai,
                                                     @Part("tujuan") RequestBody tujuan,@Part("uraian") RequestBody uraian,
                                                     @Part("metode") RequestBody metode, @Part("username") RequestBody username, @Part("file_pengajuan") RequestBody file_pengajuan_sebelumnya);
@@ -150,16 +135,14 @@ public interface ApiInterface {
     Call<PostPutPeminjamanKendaraan> postPeminjamanKendaraan(@Field("scan") String scan,
                                                              @Field("username") String username,
                                                              @Field("id_kendaraan") String idKendaraan,
-                                                             @Field("tujuan") String tujuan);
-
-    @FormUrlEncoded
-    @HTTP(method = "DELETE", path = "PeminjamanKendaraan", hasBody = true)
-    Call<PostPutPeminjamanKendaraan> deletePeminjamanKendaraan(@Field("id") int id);
+                                                             @Field("tujuan") String tujuan,
+                                                             @Field("tanggal_waktu") String tanggal_waktu,
+                                                             @Field("tanggal") String tanggal,
+                                                             @Field("waktu") String waktu);
 
     //    K A N T O R
     @GET("Kantor")
     Call<GetKantor> getKantor();
-
 
     //    K E G I A T A N
     @FormUrlEncoded
@@ -180,7 +163,8 @@ public interface ApiInterface {
                                        @Field("hasil") String hasil,
                                        @Field("jumlah") int jumlah,
                                        @Field("satuan") String satuan,
-                                       @Field("keterangan") String keterangan);
+                                       @Field("keterangan") String keterangan,
+                                       @Field("date_added") String date_added);
 
     @FormUrlEncoded
     @PUT("Kegiatan")
@@ -191,7 +175,8 @@ public interface ApiInterface {
                                       @Field("jumlah") int jumlah,
                                       @Field("satuan") String satuan,
                                       @Field("keterangan") String keterangan,
-                                      @Field("id") int id);
+                                      @Field("id") int id,
+                                      @Field("date_updated") String date_updated);
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "Kegiatan", hasBody = true)
     Call<PostPutKegiatan> deleteKegiatan(@Field("id") int id);
@@ -214,7 +199,8 @@ public interface ApiInterface {
     @Multipart
     @POST("Filekegiatan")
     Call<GetPostPutFileKegiatan> postFileKegiatan(@Part MultipartBody.Part file,
-                                                  @Part("id_kegiatan") RequestBody idKegiatan);
+                                                  @Part("id_kegiatan") RequestBody idKegiatan,
+                                                  @Part("date_added") RequestBody dateAdded);
 
 
 
@@ -248,7 +234,9 @@ public interface ApiInterface {
     Call<GetAbsensiPegawai> getCheckWaktu(@Field("check") String check);
     @FormUrlEncoded
     @POST("AbsensiPegawai")
-    Call<GetAbsensiPegawai> getCheckAbsen(@Field("username") String username);
+    Call<GetAbsensiPegawai> getCheckAbsen(@Field("username") String username,
+                                          @Field("table") String table,
+                                          @Field("tanggal") String tanggal);
 
     @FormUrlEncoded
     @POST("AbsensiPegawai")
@@ -257,24 +245,31 @@ public interface ApiInterface {
                                     @Field("lat_ci") String lat_ci,
                                     @Field("lng_ci") String lng_ci,
                                     @Field("lokasi_ci") String lokasi_ci,
-                                    @Field("waktu") String waktu);
-    @FormUrlEncoded
-    @POST("AbsensiPegawai")
-    Call<GetAbsensiPegawai> CheckOut(@Field("check") String check,@Field("id") int id,
-                                     @Field("username") String username,@Field("lat_co") String lat_co,
-                                     @Field("lng_co") String lng_co, @Field("lokasi_co") String lokasi_co,
-                                     @Field("waktu") String waktu);
-    @FormUrlEncoded
-    @POST("AbsensiPegawai")
-    Call<GetAbsensiPegawai> CheckJadwaLibur(@Field("check") String check);
+                                    @Field("waktu") String waktu,
+                                    @Field("tanggal") String tanggal,
+                                    @Field("date_added") String date_added);
 
+    @FormUrlEncoded
+    @POST("AbsensiPegawai")
+    Call<GetAbsensiPegawai> CheckOut(@Field("check") String check,
+                                     @Field("id") int id,
+                                     @Field("username") String username,
+                                     @Field("lat_co") String lat_co,
+                                     @Field("lng_co") String lng_co,
+                                     @Field("lokasi_co") String lokasi_co,
+                                     @Field("waktu") String waktu,
+                                     @Field("tanggal") String tanggal,
+                                     @Field("date_updated") String date_updated);
     @FormUrlEncoded
     @POST("AbsensiPegawai")
     Call<PostPutLembur> CheckJadwaLembur(@Field("check") String check,@Field("username") String username);
 
     @FormUrlEncoded
     @POST("AbsensiPegawai")
-    Call<GetAbsensiPegawai> CheckAbsensiLembur(@Field("check") String check,@Field("checklembur") String checklembur,@Field("username") String username);
+    Call<GetAbsensiPegawai> CheckAbsensiLembur(@Field("check") String check,
+                                               @Field("checklembur") String checklembur,
+                                               @Field("username") String username,
+                                               @Field("tanggal") String tanggal);
 
     @Multipart
     @POST("LoginMobile")

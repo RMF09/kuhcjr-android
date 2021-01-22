@@ -45,6 +45,7 @@ import com.rmf.kuhcjr.Data.PostPutCuti;
 import com.rmf.kuhcjr.FileUtils;
 import com.rmf.kuhcjr.R;
 import com.rmf.kuhcjr.SharedPrefs;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -278,8 +279,8 @@ public class EditPengajuanCuti extends AppCompatActivity {
             RequestBody idBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(id));
             RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), username);
             RequestBody filePS = RequestBody.create(MediaType.parse("text/plain"), this.file);
-
-            Call<PostPutCuti> CutiCall = apiInterface.putCuti(requestFile,idBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernameBody,filePS);
+            RequestBody dateUpdatedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
+            Call<PostPutCuti> CutiCall = apiInterface.putCuti(requestFile,idBody,dateUpdatedBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernameBody,filePS);
             CutiCall.enqueue(new Callback<PostPutCuti>() {
                 @Override
                 public void onResponse(Call<PostPutCuti> call, Response<PostPutCuti>

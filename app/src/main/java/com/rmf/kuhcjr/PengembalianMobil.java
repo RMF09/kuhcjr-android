@@ -34,6 +34,7 @@ import com.rmf.kuhcjr.Api.ApiInterface;
 import com.rmf.kuhcjr.Data.DataPeminjamanKendaraan;
 import com.rmf.kuhcjr.Data.GetPeminjamanKendaraan;
 import com.rmf.kuhcjr.Data.PostPutPeminjamanKendaraan;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -227,7 +228,6 @@ public class PengembalianMobil extends AppCompatActivity {
                     if(status.equals("berhasil")){
                         List<DataPeminjamanKendaraan> PKList = response.body().getDataPeminjamanKendaraan();
 
-                        Toast.makeText(PengembalianMobil.this, PKList.get(0).getFoto(), Toast.LENGTH_SHORT).show();
                         Collections.reverse(PKList);
                         mAdapter2 = new AdapterRVPengembalianKendaraan(PKList);
 //                        mAdapter2.notifyDataSetChanged();
@@ -269,7 +269,8 @@ public class PengembalianMobil extends AppCompatActivity {
         });
     }
     private void kembalikanMobil(String idKendaraan){
-        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("1","pegawai",idKendaraan,"");
+        String username = SharedPrefs.getInstance(this).LoggedInUser();
+        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("1",username,idKendaraan,"", DateUtils.getDateAndTime(),DateUtils.getDateDB(),DateUtils.getTimeNow());
         PKCall.enqueue(new Callback<PostPutPeminjamanKendaraan>() {
             @Override
             public void onResponse(Call<PostPutPeminjamanKendaraan> call, Response<PostPutPeminjamanKendaraan>
@@ -299,7 +300,7 @@ public class PengembalianMobil extends AppCompatActivity {
     }
     private void checkDataTerakhir(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("check",username,"","");
+        Call<PostPutPeminjamanKendaraan> PKCall = mApiInterface.postPeminjamanKendaraan("check",username,"","", DateUtils.getDateAndTime(),DateUtils.getDateDB(),DateUtils.getTimeNow());
         PKCall.enqueue(new Callback<PostPutPeminjamanKendaraan>() {
             @Override
             public void onResponse(Call<PostPutPeminjamanKendaraan> call, Response<PostPutPeminjamanKendaraan>

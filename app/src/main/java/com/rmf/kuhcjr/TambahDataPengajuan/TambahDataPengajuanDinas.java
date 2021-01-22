@@ -47,6 +47,7 @@ import com.rmf.kuhcjr.Data.PostPutPerjalananDinas;
 import com.rmf.kuhcjr.FileUtils;
 import com.rmf.kuhcjr.R;
 import com.rmf.kuhcjr.SharedPrefs;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -300,8 +301,9 @@ public class TambahDataPengajuanDinas extends AppCompatActivity {
             RequestBody tujuanBody = RequestBody.create(MediaType.parse("text/plain"), tujuan);
             RequestBody metodeBody = RequestBody.create(MediaType.parse("text/plain"), "insert");
             RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), username);
+            RequestBody dateAddedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
 
-            Call<PostPutPerjalananDinas> PDCall = apiInterface.postPerjalananDinas(requestFile,tanggalBody,mulaiBody,selesaiBody,tujuanBody,uraianBody,metodeBody,usernameBody);
+            Call<PostPutPerjalananDinas> PDCall = apiInterface.postPerjalananDinas(requestFile,tanggalBody,dateAddedBody,mulaiBody,selesaiBody,tujuanBody,uraianBody,metodeBody,usernameBody);
             PDCall.enqueue(new Callback<PostPutPerjalananDinas>() {
                 @Override
                 public void onResponse(Call<PostPutPerjalananDinas> call, Response<PostPutPerjalananDinas>

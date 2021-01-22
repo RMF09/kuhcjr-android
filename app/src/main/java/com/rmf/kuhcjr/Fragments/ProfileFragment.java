@@ -160,7 +160,6 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<GetUserLogin> call, Response<GetUserLogin>
                     response) {
                 String status = response.body().getStatus();
-                String message = response.body().getMessage();
                 List<DataUserLogin> listDataProfile = response.body().getData();
                 if(status.equals("berhasil")){
 

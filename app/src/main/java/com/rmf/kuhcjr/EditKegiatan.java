@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.rmf.kuhcjr.Api.ApiClient;
 import com.rmf.kuhcjr.Api.ApiInterface;
 import com.rmf.kuhcjr.Data.PostPutKegiatan;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -196,7 +197,7 @@ public class EditKegiatan extends AppCompatActivity {
     private void updateData(final String tanggal,final String kegiatan,final String hasil,final int jumlah,
                             final String satuan, final String keterangan, final int id){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<PostPutKegiatan> PKCall = mApiInterface.putKegiatan(tanggal,username,kegiatan,hasil,jumlah,satuan,keterangan,id);
+        Call<PostPutKegiatan> PKCall = mApiInterface.putKegiatan(tanggal,username,kegiatan,hasil,jumlah,satuan,keterangan,id, DateUtils.getDateAndTime());
         PKCall.enqueue(new Callback<PostPutKegiatan>() {
             @Override
             public void onResponse(Call<PostPutKegiatan> call, Response<PostPutKegiatan>

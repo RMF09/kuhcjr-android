@@ -50,6 +50,7 @@ import com.rmf.kuhcjr.Data.GetPostPutFileKegiatan;
 import com.rmf.kuhcjr.Data.PostPutCuti;
 import com.rmf.kuhcjr.Data.PostPutKegiatan;
 import com.rmf.kuhcjr.TambahDataPengajuan.TambahDataPengajuanCuti;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -286,7 +287,7 @@ public class DetailKegiatan extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(diupload==false){
+                if(!diupload){
 
                     if(filePath.equals("")){
                         Snackbar.make(v,"Harap pilih file terlebih dahulu",Snackbar.LENGTH_SHORT).show();
@@ -347,7 +348,8 @@ public class DetailKegiatan extends AppCompatActivity {
     }
     private void loadData(){
 //        progressBar.setVisibility(View.VISIBLE);
-        Call<GetKegiatan> KegiatanCall = mApiInterface.getDetailKegiatan("detail","pegawai",id);
+        String username= SharedPrefs.getInstance(this).LoggedInUser();
+        Call<GetKegiatan> KegiatanCall = mApiInterface.getDetailKegiatan("detail",username,id);
         KegiatanCall.enqueue(new Callback<GetKegiatan>() {
             @Override
             public void onResponse(Call<GetKegiatan> call, Response<GetKegiatan>
@@ -357,7 +359,7 @@ public class DetailKegiatan extends AppCompatActivity {
                     if(status.equals("berhasil")){
 //                        progressBar.setVisibility(View.GONE);
                         List<DataKegiatan> dataKegiatan = response.body().getListDataKegiatan();
-                        textTgl.setText(dataKegiatan.get(0).getTanggal());
+                        //textTgl.setText(dataKegiatan.get(0).getTanggal());
                         textKegiatan.setText(dataKegiatan.get(0).getKegiatan());
                         textHasil.setText(dataKegiatan.get(0).getHasil());
                         textJumlah.setText(dataKegiatan.get(0).getJumlah());
@@ -686,6 +688,7 @@ public class DetailKegiatan extends AppCompatActivity {
             //RequestBody
             RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)),file);
             RequestBody idKegiatanBody = RequestBody.create(MediaType.parse("text/plain"), idKegiatan);
+            RequestBody dateAddedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
 
             MultipartBody.Part body =
                     MultipartBody.Part.createFormData("file", file.getName(), requestFile);
@@ -695,7 +698,7 @@ public class DetailKegiatan extends AppCompatActivity {
             linearProgressUpload.setVisibility(View.VISIBLE);
             linearBtnUpload.setVisibility(View.GONE);
 
-            Call<GetPostPutFileKegiatan> fileCall = mApiInterface.postFileKegiatan(body,idKegiatanBody);
+            Call<GetPostPutFileKegiatan> fileCall = mApiInterface.postFileKegiatan(body,idKegiatanBody,dateAddedBody);
             fileCall.enqueue(new Callback<GetPostPutFileKegiatan>() {
                 @Override
                 public void onResponse(Call<GetPostPutFileKegiatan> call, Response<GetPostPutFileKegiatan>

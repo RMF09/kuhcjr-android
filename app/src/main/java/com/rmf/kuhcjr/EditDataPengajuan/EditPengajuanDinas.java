@@ -331,7 +331,6 @@ public class EditPengajuanDinas extends AppCompatActivity {
 
             //RequestBody
             RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(fileUri)),file);
-            RequestBody tanggalBody = RequestBody.create(MediaType.parse("text/plain"), tanggal);
             RequestBody idBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(id));
             RequestBody mulaiBody = RequestBody.create(MediaType.parse("text/plain"), mulai);
             RequestBody selesaiBody = RequestBody.create(MediaType.parse("text/plain"), selesai);
@@ -340,8 +339,9 @@ public class EditPengajuanDinas extends AppCompatActivity {
             RequestBody metodeBody = RequestBody.create(MediaType.parse("text/plain"), "update");
             RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"), username);
             RequestBody filePS = RequestBody.create(MediaType.parse("text/plain"), this.file);
-
-            Call<PostPutPerjalananDinas> PDCall = apiInterface.putPerjalananDinas(requestFile,idBody,tanggalBody,mulaiBody,selesaiBody,tujuanBody,uraianBody,metodeBody,usernameBody,filePS);
+            RequestBody tanggalBody = RequestBody.create(MediaType.parse("text/plain"),tanggal);
+            RequestBody dateUpdatedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
+            Call<PostPutPerjalananDinas> PDCall = apiInterface.putPerjalananDinas(requestFile,idBody,tanggalBody,dateUpdatedBody,mulaiBody,selesaiBody,tujuanBody,uraianBody,metodeBody,usernameBody,filePS);
             PDCall.enqueue(new Callback<PostPutPerjalananDinas>() {
                 @Override
                 public void onResponse(Call<PostPutPerjalananDinas> call, Response<PostPutPerjalananDinas>

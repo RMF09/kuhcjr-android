@@ -56,6 +56,7 @@ import com.rmf.kuhcjr.Pengajuan.PengajuanLembur;
 import com.rmf.kuhcjr.ProgressDialogPengajuan;
 import com.rmf.kuhcjr.R;
 import com.rmf.kuhcjr.SharedPrefs;
+import com.rmf.kuhcjr.Utils.DateUtils;
 
 import java.io.File;
 import java.text.ParseException;
@@ -327,8 +328,9 @@ public class TambahDataPengajuanLembur extends AppCompatActivity {
             RequestBody uraianBody = RequestBody.create(MediaType.parse("text/plain"), uraian);
             RequestBody metodeBody = RequestBody.create(MediaType.parse("text/plain"), "insert");
             RequestBody usernameBody = RequestBody.create(MediaType.parse("text/plain"),username);
+            RequestBody dateAddedBody = RequestBody.create(MediaType.parse("text/plain"), DateUtils.getDateAndTime());
 
-            Call<PostPutLembur> LemburCall = apiInterface.postLembur(requestFile,tanggalBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernameBody);
+            Call<PostPutLembur> LemburCall = apiInterface.postLembur(requestFile,tanggalBody,dateAddedBody,mulaiBody,selesaiBody,uraianBody,metodeBody,usernameBody);
             LemburCall.enqueue(new Callback<PostPutLembur>() {
                 @Override
                 public void onResponse(Call<PostPutLembur> call, Response<PostPutLembur>

@@ -80,6 +80,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,7 +94,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     private boolean dalamJangkauan =false,libur=false,initial=false,checkInOut=false,adaLembur=false;
     private String statusAbsensi,statusAbsensiLembur,tanggalLembur,mulaiLembur,selesaiLembur;
     private int id=0,idAbsensiLembur=0, jamAwalAbsen=5,jamAkhirAbsen=10,statusLembur;
-    private String tanggalSekarang; //5 10
+    private int jamAwalPulang=17,jamAkhirPulang=24;//5 10
+                        //17 24
     private String actionAbsen;
 
     Location currentLocation;
@@ -133,6 +135,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     private TextView textERR,textMuatUlang;
 
     private TextView textAbsen,textPulang;
+    private TextView textAbsenLembur,textPulangLembur;
 
     private BroadcastReceiver broadcastReceiver;
     Marker marker =null;
@@ -164,7 +167,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         initialDialogAbsen();
 
 
-        checkJadwalLibur();
+        checkAbsensiHariIni();
         //1. Check Jadwal Libur
         //2. Check Absensi Hari ini
         //3. Check Jadwal Lembur
@@ -203,13 +206,15 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         textMuatUlang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkJadwalLibur();
+                checkAbsensiHariIni();
             }
         });
 
         textAbsen = findViewById(R.id.waktu_masuk);
         textPulang = findViewById(R.id.waktu_pulang);
 
+        textAbsenLembur = findViewById(R.id.waktu_masuk_lembur);
+        textPulangLembur = findViewById(R.id.waktu_pulang_lembur);
 
         this.actionUI();
         btnAbsen.setEnabled(false);
@@ -224,6 +229,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                 DataKantor dataKantor = (DataKantor) parent.getItemAtPosition(position);
                 namaKantor = dataKantor.getLokasi();
                 aturLokasiKantorDipilih(dataKantor.getLokasi(),dataKantor.getLat(),dataKantor.getLng(),1);
+                checkLokasiSaya=false;
 //                Toast.makeText(Absensi.this, "Lat : "+dataKantor.getLat(), Toast.LENGTH_SHORT).show();
             }
 
@@ -258,22 +264,39 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         btnAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkLokasiSaya){
-                    if(dalamJangkauan){
-                        checkInOut=true;
-                        if(statusAbsensi.equals("sudah absen")){
-                            actionAbsen = "check_out";
+                checkJadwalLibur();
+                if(libur){
+                    peringatanLibur();
+                }else{
+
+                    if(checkLokasiSaya){
+                        if(dalamJangkauan){
+                            checkInOut=true;
+                            if(statusAbsensi.equals("sudah absen")){
+                                actionAbsen = "check_out";
+                                int jamSekarang  = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+                                if(jamSekarang == 0){
+                                    jamSekarang =24;
+                                }
+                                if(jamSekarang>=jamAwalPulang && jamSekarang <jamAkhirPulang){
+                                    showDialogAbsen();
+                                }
+                                else{
+                                    Toast.makeText(Absensi.this, "Anda bisa pulang dari jam 5 sore sampai 12 malam", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            else{
+                                actionAbsen = "check_in";
+                                showDialogAbsen();
+                            }
+                        }else{
+                            Toast.makeText(Absensi.this, "Tidak dapat mengabsen karena Anda diluar jangkauan kantor", Toast.LENGTH_SHORT).show();
                         }
-                        else{
-                            actionAbsen = "check_in";
-                        }
-                        showDialogAbsen();
-                    }else{
-                        Toast.makeText(Absensi.this, "Tidak dapat mengabsen karena Anda diluar jangkauan kantor", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
-                    Toast.makeText(Absensi.this, "Mohon Tekan Cek Lokasi Anda terlebih dahulu", Toast.LENGTH_SHORT).show();
+                    else{
+                        Toast.makeText(Absensi.this, "Mohon Tekan Cek Lokasi Anda terlebih dahulu", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
@@ -283,18 +306,64 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 if(adaLembur){
-                    if(statusAbsensi.equals("sudah absen")){
-                        if(statusAbsensiLembur.equals("belum absen")){
-                            actionAbsen ="check_in_lembur";
-                            showDialogAbsen();
-//                            checkWaktuLembur("in");
-                        }else if(statusAbsensiLembur.equals("sudah absen")){
-                            actionAbsen ="check_out_lembur";
-                            showDialogAbsen();
-//                            checkWaktuLembur("out");
+                    //Hari Kerja harus checkout dulu sblm check-in lembur
+                    if(!libur){
+                        if(statusAbsensi.equals("sudah pulang")){
+                            //check-in lembur!
+                            if(checkLokasiSaya){
+                              if(dalamJangkauan){
+                                  //
+                                  if(statusAbsensiLembur.equals("belum absen")){
+                                      actionAbsen ="check_in_lembur";
+                                      showDialogAbsen();
+                                  }else if(statusAbsensiLembur.equals("sudah absen")){
+                                      actionAbsen ="check_out_lembur";
+                                      showDialogAbsen();
+                                  }
+                              }else{
+                                  Toast.makeText(Absensi.this, "Tidak dapat mengabsen karena Anda diluar jangkauan kantor", Toast.LENGTH_SHORT).show();
+                              }
+                            }else{
+                                Toast.makeText(Absensi.this, "Mohon Tekan Cek Lokasi Anda terlebih dahulu", Toast.LENGTH_SHORT).show();
+
+                            }
+
                         }
-                    }else {
-                        Toast.makeText(Absensi.this, "Silahkan absen masuk kantor terlebih dahulu", Toast.LENGTH_SHORT).show();
+                        else{
+                            if(statusAbsensi.equals("belum absen")){
+                                Toast.makeText(
+                                        Absensi.this,
+                                        "Silahkan absen masuk kantor terlebih dahulu",
+                                        Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(
+                                        Absensi.this,
+                                        "Silahkan absen pulang kantor terlebih dahulu",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    //hari libur terus lembur biar dapat pulus
+                    else{
+                        //check-in lembur!
+                        if(checkLokasiSaya){
+                            if(dalamJangkauan){
+                                //
+                                if(statusAbsensiLembur.equals("belum absen")){
+                                    actionAbsen ="check_in_lembur";
+                                    showDialogAbsen();
+                                }else if(statusAbsensiLembur.equals("sudah absen")){
+                                    actionAbsen ="check_out_lembur";
+                                    showDialogAbsen();
+                                }
+                            }else{
+                                Toast.makeText(Absensi.this, "Tidak dapat mengabsen karena Anda diluar jangkauan kantor", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(Absensi.this, "Mohon Tekan Cek Lokasi Anda terlebih dahulu", Toast.LENGTH_SHORT).show();
+
+                        }
+
                     }
                 }
             }
@@ -318,9 +387,6 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                if(libur){
-                    finish();
-                }
             }
         });
 
@@ -357,10 +423,10 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                         checkOUT();
                         break;
                     case "check_in_lembur":
-                        checkWaktuLembur("in");
+                        checkINLembur();
                         break;
                     case "check_out_lembur":
-                        checkWaktuLembur("out");
+                        checkOUTLembur();
                         break;
                     default:
                         //OK button
@@ -512,6 +578,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
+
+        dalamJangkauan=false;
         googleMap.clear();
 
         LatLng latLng2 = new LatLng(lat,longt);
@@ -524,7 +592,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         circleOptions.center(latLng2);
 //        5km
 //        circleOptions.radius(500)
-        circleOptions.radius(35);
+        circleOptions.radius(100);
         circleOptions.fillColor(Color.parseColor("#6817A2B8"));
         circleOptions.strokeWidth(1);
         circleOptions.strokeColor(Color.parseColor("#17a2b8"));
@@ -533,6 +601,11 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         googleMap.addCircle(circleOptions);
 
         if(lihatLokasi==0) {
+            if(broadcastReceiver!=null){
+                unregisterReceiver(broadcastReceiver);
+//                Toast.makeText(this, "Unregistered Receiver", Toast.LENGTH_SHORT).show();
+                broadcastReceiver=null;
+            }
             if(broadcastReceiver==null){
                 broadcastReceiver = new BroadcastReceiver() {
                     @Override
@@ -556,15 +629,12 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
                         Location.distanceBetween(markerOptions.getPosition().latitude,markerOptions.getPosition().longitude,circleOptions.getCenter().latitude,circleOptions.getCenter().longitude,jarak);
 
-                        if(jarak[0] > circleOptions.getRadius()){
-                            dalamJangkauan=false;
-                        }
-                        else{
-                            dalamJangkauan=true;
-                        }
+                        dalamJangkauan= !(jarak[0] > circleOptions.getRadius());
+                        //Toast.makeText(context, "dalamJangkauan = "+dalamJangkauan, Toast.LENGTH_SHORT).show();
                     }
                 };
             }
+
             registerReceiver(broadcastReceiver, new IntentFilter(Constans.ACTION_NAME));
         }
         else{
@@ -702,10 +772,16 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private void checkAbsensiHariIni(){
-        textDialog.setText("Memeriksa status absensi");
+        if(!checkInOut){
+
+            linearMasalahJaringan.setVisibility(View.GONE);
+            alertDialog.show();
+            textDialog.setText("Memeriksa status absensi");
+        }
         btnAbsen.setEnabled(false);
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.getCheckAbsen(username);
+        Log.d("Absensi", "checkAbsensiHariIni: Username : "+username);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.getCheckAbsen(username,"pegawai_absen",DateUtils.getDateDB());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -715,27 +791,34 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                     btnAbsen.setEnabled(true);
 
 //                    Toast.makeText(Absensi.this, statusAbsensi, Toast.LENGTH_SHORT).show();
-                    if(statusAbsensi.equals("belum absen")){
-                        btnAbsen.setText("Absen Masuk Kantor");
-                    }else if(statusAbsensi.equals("sudah absen")){
-                        btnAbsen.setText("Absen Pulang Kantor");
+                    switch (statusAbsensi) {
+                        case "belum absen":
+                            btnAbsen.setText("Absen Masuk Kantor");
+                            break;
+                        case "sudah absen": {
+                            btnAbsen.setText("Absen Pulang Kantor");
 
-                        List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
-                        textAbsen.setText(
-                                "Absen Masuk : "+
-                                DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
+                            List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
+                            textAbsen.setText(
+                                    "Absen Masuk : " +
+                                            DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
 
-                        id= data.get(0).getId();
+                            id = data.get(0).getId();
+                            Log.d("Absensi", "onResponse: "+id);
 //                        Toast.makeText(Absensi.this, "ID : "+id, Toast.LENGTH_SHORT).show();
-                    }else if(statusAbsensi.equals("sudah pulang")){
-                        btnAbsen.setText("Anda Sudah Pulang");
-                        btnAbsen.setEnabled(false);
+                            break;
+                        }
+                        case "sudah pulang": {
+                            btnAbsen.setText("Anda Sudah Pulang");
+                            btnAbsen.setEnabled(false);
 
-                        List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
-                        textAbsen.setText(
-                                "Absen Masuk : "+
-                                        DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
-                        textPulang.setText("Absen Pulang : "+ DateUtils.getWaktuAbsen(data.get(0).getCheck_out()));
+                            List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
+                            textAbsen.setText(
+                                    "Absen Masuk : " +
+                                            DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
+                            textPulang.setText("Absen Pulang : " + DateUtils.getWaktuAbsen(data.get(0).getCheck_out()));
+                            break;
+                        }
                     }
                     checkJadwalLembur();
 
@@ -760,7 +843,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     }
     private void checkIN(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("in",username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
+        textDialogAbsen.setText("Harap tunggu...");
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("in",username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow(),DateUtils.getDateDB(),DateUtils.getDateAndTime());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -788,9 +872,10 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
     private void checkOUT(){
+        final String username = SharedPrefs.getInstance(this).LoggedInUser();
         textDialogAbsen.setText("Harap tunggu...");
-        String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("out",id,username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
+        Log.d("CO", "checkOUT: username "+username+id);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("out",id,username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow(),DateUtils.getDateDB(),DateUtils.getDateAndTime());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -799,26 +884,27 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                     if(status.equals("berhasil")){
                         checkAbsensiHariIni();
                         setSuccessDialogAbsen();
-//                        Toast.makeText(Absensi.this, "Berhasil check out", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Log.d("CO", "onResponse: fail :"+status);
                     }
                 }
                 else {
                     setFailedDialogAbsen("Terjadi masalah pada Server");
-//                    Toast.makeText(Absensi.this, "Terjadi masalah pada Server", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GetAbsensiPegawai> call, Throwable t) {
                 setFailedDialogAbsen(t.getMessage());
-//                Toast.makeText(Absensi.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void checkINLembur(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("inlembur",username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
+        textDialogAbsen.setText("Harap tunggu...");
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckIn("inlembur",username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow(),DateUtils.getDateDB(),DateUtils.getDateAndTime());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -846,7 +932,8 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     }
     private void checkOUTLembur(){
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("outlembur",idAbsensiLembur,username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow());
+        textDialogAbsen.setText("Harap tunggu...");
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckOut("outlembur",idAbsensiLembur,username,String.valueOf(lat),String.valueOf(longt),namaKantor,DateUtils.getTimeNow(),DateUtils.getDateDB(),DateUtils.getDateAndTime());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -874,43 +961,14 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
 
     private void checkJadwalLibur(){
 
-        linearMasalahJaringan.setVisibility(View.GONE);
-        textDialog.setText("Memeriksa jadwal libur");
-        alertDialog.show();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckJadwaLibur("libur");
-        callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
-            @Override
-            public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
-                if(response.isSuccessful()){
-                    String message = response.body().getMessage();
-                    if(message.equals("Fri")){
-                        libur = true;
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
 
-                        peringatanLibur();
-
-                    }else{
-                        checkAbsensiHariIni();
-
-
-                    }
-
-                }
-                else {
-                    mapView.setVisibility(View.GONE);
-                    linearMasalahJaringan.setVisibility(View.VISIBLE);
-                    textERR.setText("ERR : Terjadi masalah pada saat mengambil jadwal libur dari server");
-                    alertDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetAbsensiPegawai> call, Throwable t) {
-                mapView.setVisibility(View.GONE);
-                linearMasalahJaringan.setVisibility(View.VISIBLE);
-                textERR.setText(t.getMessage());
-                alertDialog.dismiss();
-            }
-        });
+        if(day==Calendar.FRIDAY || day==Calendar.SATURDAY){
+            libur = true;
+            btnAbsen.setVisibility(View.GONE);
+            peringatanLibur();
+        }
     }
 
 
@@ -936,7 +994,7 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         imageViewDialog.setVisibility(View.VISIBLE);
         textOKDialog.setVisibility(View.VISIBLE);
         textDialog.setText("Hari ini libur, tap ok untuk kembali");
-
+        alertDialog.show();
     }
     private void checkJadwalLembur(){
         textDialog.setText("Memeriksa jadwal lembur");
@@ -949,9 +1007,6 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                 if(response.isSuccessful()){
                     String status = response.body().getStatus();
                     if(status.equals("berhasil")){
-
-//
-
                         List<DataLembur> datalembur = response.body().getListLembur();
                         statusLembur = datalembur.get(0).getStatus();
                         if(statusLembur==2){
@@ -959,13 +1014,11 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                             tanggalLembur = datalembur.get(0).getTanggal();
                             mulaiLembur = datalembur.get(0).getMulai();
                             selesaiLembur = datalembur.get(0).getSelesai();
-
                             checkTanggalSekarang();
                         }
                         else{
                             adaLembur=false;
                             btnAbsenLembur.setVisibility(View.GONE);
-                            adaLembur=false;
                             //Belum Ada data lembur yang Disetujui
                             initial=true;
                             if(!checkInOut){
@@ -980,17 +1033,13 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                        if(!checkInOut){
                             loadDataKantor();
                         }
-
                     }
-
                 }else{
                     mapView.setVisibility(View.GONE);
                     linearMasalahJaringan.setVisibility(View.VISIBLE);
                     textERR.setText("ERR : Terjadi masalah pada saat memeriksa jadwal lembur dari server");
                     alertDialog.dismiss();
                 }
-
-
             }
 
             @Override
@@ -1004,10 +1053,11 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
         });
     }
     private void checkAbsensiLembur(){
+
         textDialog.setText("Memeriksa status absensi lembur");
         btnAbsenLembur.setEnabled(false);
         String username = SharedPrefs.getInstance(this).LoggedInUser();
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckAbsensiLembur("absensi_lembur","",username);
+        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.CheckAbsensiLembur("absensi_lembur","",username,DateUtils.getDateDB());
         callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
             @Override
             public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
@@ -1021,12 +1071,20 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
                         btnAbsenLembur.setText("Absen Lembur");
                     }else if(statusAbsensiLembur.equals("sudah absen")){
                         btnAbsenLembur.setText("Absen Selesai Lembur");
-                        List<DataAbsensiPegawai> ambilID = response.body().getListDataAbsensiPegawai();
-                        idAbsensiLembur= ambilID.get(0).getId();
+                        List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
+                        idAbsensiLembur= data.get(0).getId();
+                        textAbsenLembur.setText(
+                                "Absen Masuk Lembur : "+
+                                        DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
 //                        Toast.makeText(Absensi.this, "ID Absensi Lembur : "+idAbsensiLembur, Toast.LENGTH_SHORT).show();
                     }else if(statusAbsensiLembur.equals("sudah pulang")){
                         btnAbsenLembur.setText("Sudah Lembur");
                         btnAbsenLembur.setEnabled(false);
+                        List<DataAbsensiPegawai> data = response.body().getListDataAbsensiPegawai();
+                        textAbsenLembur.setText(
+                                "Absen Masuk Lembur : "+
+                                        DateUtils.getWaktuAbsen(data.get(0).getCheck_in()));
+                        textPulangLembur.setText("Absen Pulang Lembur : "+ DateUtils.getWaktuAbsen(data.get(0).getCheck_out()));
                     }
 
 
@@ -1050,139 +1108,49 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
     }
     private void checkTanggalSekarang(){
         textDialog.setText("Memeriksa tanggal sekarang untuk absen lembur");
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.getCheckWaktu("waktu");
-        callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
-            @Override
-            public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
-                if(response.isSuccessful()){
-                    String status = response.body().getStatus();
-                    if(status.equals("berhasil")){
-                        String message = response.body().getMessage();
-                        tanggalSekarang = ambilTanggal(message);
-                        if(tanggalSekarang.equals(tanggalLembur)){
-                            adaLembur=true;
-                            btnAbsenLembur.setVisibility(View.VISIBLE);
-                            checkAbsensiLembur();
-                        }
-                        else{
-                            adaLembur=false;
-                            btnAbsenLembur.setVisibility(View.GONE);
-                        }
-                        initial=true;
-                        if(!checkInOut){
-                            loadDataKantor();
-                        }
 
-                    }else{
-
-                        mapView.setVisibility(View.GONE);
-                        linearMasalahJaringan.setVisibility(View.VISIBLE);
-                        textERR.setText("ERR : Gagal memeriksa tanggal sekarang dari server");
-                        alertDialog.dismiss();
-                    }
-                }
-                else {
-                    mapView.setVisibility(View.GONE);
-                    linearMasalahJaringan.setVisibility(View.VISIBLE);
-                    textERR.setText("ERR : Terjadi masalah pada saat memeriksa tanggal sekarang dari server");
-                    alertDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetAbsensiPegawai> call, Throwable t) {
-                mapView.setVisibility(View.GONE);
-                linearMasalahJaringan.setVisibility(View.VISIBLE);
-                textERR.setText(t.getMessage());
-                alertDialog.dismiss();
-            }
-        });
-    }
-    private void checkWaktuLembur(final String check){
-        textDialogAbsen.setText("Harap tunggu...");
-        Call<GetAbsensiPegawai> callAbsensi = mApiInterface.getCheckWaktu("waktu");
-        callAbsensi.enqueue(new Callback<GetAbsensiPegawai>() {
-            @Override
-            public void onResponse(Call<GetAbsensiPegawai> call, Response<GetAbsensiPegawai> response) {
-                if(response.isSuccessful()){
-                    String status = response.body().getStatus();
-                    if(status.equals("berhasil")){
-                        String message = response.body().getMessage();
-
-                        if(check.equals("in")){
-                            //Check jam mulai lembur
-                            if(Integer.valueOf(ambilJam(mulaiLembur,"H:m:s","H"))==Integer.valueOf(ambilJam(message,"y/M/d H:m:s","H"))){
-                                //menit
-                                if(Integer.valueOf(ambilJam(message,"y/M/d H:m:s","m"))>= Integer.valueOf(ambilJam(mulaiLembur,"H:m:s","m"))){
-                                    checkINLembur();
-                                }else{
-                                    setFailedDialogAbsen("Anda dapat check in lembur pada pukul "+mulaiLembur);
-//                                    Toast.makeText(Absensi.this, "Anda dapat check in lembur pada pukul "+mulaiLembur, Toast.LENGTH_SHORT).show();
-                                }
-
-                            }else{
-                                setFailedDialogAbsen("Anda dapat check in lembur pada pukul "+mulaiLembur);
-//                                Toast.makeText(Absensi.this, "Anda dapat check in lembur pada pukul "+mulaiLembur, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        else if(check.equals("out")){
-                            if(Integer.valueOf(ambilJam(message,"y/M/d H:m:s","H"))==Integer.valueOf(ambilJam(selesaiLembur,"H:m:s","H"))){
-                                //menit
-                                if(Integer.valueOf(ambilJam(message,"y/M/d H:m:s","m"))>= Integer.valueOf(ambilJam(selesaiLembur,"H:m:s","m"))){
-                                    checkOUTLembur();
-                                }else{
-                                    setFailedDialogAbsen("Anda dapat check out lembur pada pukul "+selesaiLembur);
-//                                    Toast.makeText(Absensi.this, "Anda dapat check out lembur pada pukul "+selesaiLembur, Toast.LENGTH_SHORT).show();
-                                }
-
-
-                            }else{
-                                setFailedDialogAbsen("Anda dapat check out lembur pada pukul "+selesaiLembur);
-//                                Toast.makeText(Absensi.this, "Anda dapat check out lembur pada pukul "+selesaiLembur, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }else{
-                        setFailedDialogAbsen("Gagal cek waktu lembur");
-//                        Toast.makeText(Absensi.this, "Gagal cek waktu lembur", Toast.LENGTH_SHORT).show();
-
-
-                    }
-                }
-                else {
-                    setFailedDialogAbsen("Terjadi masalah pada saat memeriksa waktu lembur dari server");
-//                    mapView.setVisibility(View.GONE);
-//                    linearMasalahJaringan.setVisibility(View.VISIBLE);
-//                    textERR.setText("ERR : Terjadi masalah pada saat memeriksa tanggal sekarang dari server");
-//                    alertDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetAbsensiPegawai> call, Throwable t) {
-                mapView.setVisibility(View.GONE);
-                linearMasalahJaringan.setVisibility(View.VISIBLE);
-                textERR.setText(t.getMessage());
-                alertDialog.dismiss();
-            }
-        });
-    }
-
-    private String ambilTanggal(String tgl){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("y/M/d H:m:s");
-
-        Date date =null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            date = simpleDateFormat.parse(tgl);
+            Date dateStart = sdf.parse(mulaiLembur);
+            Date dateEnd = sdf.parse(selesaiLembur);
+            Date dateNow = sdf.parse(DateUtils.getDateDB());
+
+            long diff = dateEnd.getTime() - dateStart.getTime();
+            Log.d("Hari", "Sisa: Days :"+ TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS));
+            long days = TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
+
+
+            long diffNow = dateStart.getTime() - dateNow.getTime();
+            Log.d("Hari", "checkTanggalSekarang dengan Mulai:Days :"+ TimeUnit.DAYS.convert(diffNow,TimeUnit.MILLISECONDS));
+            long daysNow = TimeUnit.DAYS.convert(diffNow,TimeUnit.MILLISECONDS);
+
+
+            if(daysNow <1 && days >-1){
+                adaLembur=true;
+                btnAbsenLembur.setVisibility(View.VISIBLE);
+                checkAbsensiLembur();
+            }else{
+                adaLembur=false;
+                btnAbsenLembur.setVisibility(View.GONE);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd");
-        String akhir = output.format(date);
+//        if(DateUtils.getDateDB().equals(mulaiLembur)){
+//            adaLembur=true;
+//            btnAbsenLembur.setVisibility(View.VISIBLE);
+//            checkAbsensiLembur();
+//        }
+//        else{
+//            adaLembur=false;
+//            btnAbsenLembur.setVisibility(View.GONE);
+//        }
 
-        return akhir;
-
+        initial=true;
+        if(!checkInOut){
+            loadDataKantor();
+        }
     }
-
     private boolean isLocationServiceRunning(){
         ActivityManager activityManager=
                 (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -1213,12 +1181,4 @@ public class Absensi extends AppCompatActivity implements OnMapReadyCallback {
             startService(intent);
         }
     }
-
-
-
-
-
-
-
-
 }
